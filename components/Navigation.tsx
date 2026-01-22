@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,7 +40,7 @@ export default function Navigation() {
     <motion.nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-md"
+          ? "bg-white/95 dark:bg-primary-900/95 backdrop-blur-md shadow-md"
           : "bg-transparent"
       }`}
       initial={{ y: -100 }}
@@ -52,7 +53,7 @@ export default function Navigation() {
           <motion.a
             href="#"
             className={`text-2xl font-bold ${
-              isScrolled ? "text-primary-900" : "text-white"
+              isScrolled ? "text-primary-900 dark:text-white" : "text-white"
             }`}
             onClick={(e) => {
               e.preventDefault();
@@ -70,7 +71,9 @@ export default function Navigation() {
                 key={link.name}
                 variant="ghost"
                 className={`${
-                  isScrolled ? "text-primary-700 hover:text-primary-900" : "text-white hover:text-white/80"
+                  isScrolled
+                    ? "text-primary-700 hover:text-primary-900 dark:text-primary-200 dark:hover:text-white"
+                    : "text-white hover:text-white/80"
                 }`}
                 onClick={(e) => {
                   e.preventDefault();
@@ -80,46 +83,55 @@ export default function Navigation() {
                 {link.name}
               </Button>
             ))}
+
+            {/* Theme Toggle */}
+            <div className="ml-2">
+              <ThemeToggle />
+            </div>
+
             <a
               href="/resume.pdf"
               download
-              className="ml-4 inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 h-9 px-3 bg-accent-500 text-white hover:bg-accent-600"
+              className="ml-2 inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 h-9 px-3 bg-accent-500 text-white hover:bg-accent-600"
             >
               Resume
             </a>
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            className={`md:hidden p-2 ${
-              isScrolled ? "text-primary-900" : "text-white"
-            }`}
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button
+              className={`p-2 ${
+                isScrolled ? "text-primary-900 dark:text-white" : "text-white"
+              }`}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
             >
-              {isMobileMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {isMobileMenuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -138,7 +150,7 @@ export default function Navigation() {
                     key={link.name}
                     variant="ghost"
                     className={`w-full justify-start ${
-                      isScrolled ? "text-primary-700" : "text-white"
+                      isScrolled ? "text-primary-700 dark:text-primary-200" : "text-white"
                     }`}
                     onClick={(e) => {
                       e.preventDefault();

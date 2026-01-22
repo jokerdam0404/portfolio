@@ -8,12 +8,31 @@
     --font-geist-mono: 'Geist Mono', 'SF Mono', 'Roboto Mono', monospace;
   }
 
+  /* Light mode (default) */
   body {
     @apply bg-primary-50 text-primary-900 font-sans antialiased;
   }
 
+  /* Dark mode */
+  .dark body {
+    @apply bg-primary-950 text-primary-50;
+  }
+
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Dark mode section backgrounds */
+  .dark section {
+    @apply bg-primary-950;
+  }
+
+  .dark section.bg-white {
+    @apply bg-primary-900;
+  }
+
+  .dark section.bg-primary-50 {
+    @apply bg-primary-900;
   }
 }
 
@@ -22,7 +41,7 @@
     text-wrap: balance;
   }
 
-  /* Custom gradient background for hero */
+  /* Custom gradient background for hero - Light mode */
   .gradient-bg {
     background: linear-gradient(
       135deg,
@@ -31,6 +50,19 @@
       #334155 50%,
       #1E293B 75%,
       #0F172A 100%
+    );
+    background-size: 400% 400%;
+  }
+
+  /* Dark mode gradient - deeper colors */
+  .dark .gradient-bg {
+    background: linear-gradient(
+      135deg,
+      #020617 0%,
+      #0F172A 25%,
+      #1E293B 50%,
+      #0F172A 75%,
+      #020617 100%
     );
     background-size: 400% 400%;
   }
@@ -54,8 +86,48 @@
     @apply bg-white/10 backdrop-blur-lg border border-white/20;
   }
 
+  .dark .glass {
+    @apply bg-black/20 backdrop-blur-lg border border-white/10;
+  }
+
   /* Card hover effect */
   .card-hover {
     @apply transition-all duration-300 hover:scale-105 hover:shadow-2xl;
+  }
+
+  /* Dark mode card styles */
+  .dark .bg-white {
+    @apply bg-primary-800;
+  }
+
+  /* Text colors in dark mode */
+  .dark .text-primary-900 {
+    @apply text-primary-50;
+  }
+
+  .dark .text-primary-700 {
+    @apply text-primary-300;
+  }
+
+  .dark .text-primary-600 {
+    @apply text-primary-400;
+  }
+
+  .dark .text-primary-500 {
+    @apply text-primary-400;
+  }
+
+  /* Border colors in dark mode */
+  .dark .border-primary-200 {
+    @apply border-primary-700;
+  }
+
+  .dark .border-primary-300 {
+    @apply border-primary-600;
+  }
+
+  /* Hover states in dark mode */
+  .dark .hover\:bg-primary-100:hover {
+    @apply bg-primary-800;
   }
 }

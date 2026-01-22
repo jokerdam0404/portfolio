@@ -16,7 +16,31 @@ interface HeroSceneProps {
   animated?: boolean;
   /** Scale factor for mobile devices */
   scale?: number;
+  /** Scroll progress (0-1) for parallax effect */
+  scrollProgress?: number;
+  /** Dark mode enabled */
+  isDark?: boolean;
 }
+
+// Color palettes for light and dark modes
+const COLORS = {
+  light: {
+    sphere: "#1E40AF",
+    innerGlow: "#60A5FA",
+    ring: "#3B82F6",
+    keyLight: "#E0E7FF",
+    fillLight: "#3B82F6",
+    particleIntensity: { r: 0.4, g: 0.6, b: 1.0 },
+  },
+  dark: {
+    sphere: "#3B82F6",
+    innerGlow: "#93C5FD",
+    ring: "#60A5FA",
+    keyLight: "#BFDBFE",
+    fillLight: "#60A5FA",
+    particleIntensity: { r: 0.5, g: 0.7, b: 1.0 },
+  },
+};
 
 /**
  * Orbiting particles around the central sphere.
@@ -25,18 +49,20 @@ interface HeroSceneProps {
 function OrbitingParticles({
   count = 60,
   animated = true,
-  scale = 1
+  scale = 1,
+  isDark = false,
 }: {
   count: number;
   animated: boolean;
   scale: number;
+  isDark?: boolean;
 }) {
   const particlesRef = useRef<THREE.Points>(null);
+  const palette = isDark ? COLORS.dark : COLORS.light;
 
   // Generate particle positions in orbital rings
-  const { positions, sizes, colors } = useMemo(() => {
+  const { positions, colors } = useMemo(() => {
     const pos = new Float32Array(count * 3);
-    const siz = new Float32Array(count);
     const col = new Float32Array(count * 3);
 
     for (let i = 0; i < count; i++) {
@@ -58,18 +84,15 @@ function OrbitingParticles({
       pos[i * 3 + 1] = y * scale;
       pos[i * 3 + 2] = z * scale;
 
-      // Varying particle sizes
-      siz[i] = (0.03 + Math.random() * 0.05) * scale;
-
-      // Blue-white color palette (finance professional aesthetic)
+      // Blue-white color palette (adjusts for dark/light mode)
       const intensity = 0.7 + Math.random() * 0.3;
-      col[i * 3] = 0.4 * intensity;     // R
-      col[i * 3 + 1] = 0.6 * intensity; // G
-      col[i * 3 + 2] = 1.0 * intensity; // B
+      col[i * 3] = palette.particleIntensity.r * intensity;
+      col[i * 3 + 1] = palette.particleIntensity.g * intensity;
+      col[i * 3 + 2] = palette.particleIntensity.b * intensity;
     }
 
-    return { positions: pos, sizes: siz, colors: col };
-  }, [count, scale]);
+    return { positions: pos, colors: col };
+  }, [count, scale, palette]);
 
   // Animate orbital rotation
   useFrame((state) => {
@@ -96,7 +119,7 @@ function OrbitingParticles({
         size={0.08 * scale}
         vertexColors
         transparent
-        opacity={0.8}
+        opacity={isDark ? 0.9 : 0.8}
         sizeAttenuation
         blending={THREE.AdditiveBlending}
       />
@@ -108,9 +131,18 @@ function OrbitingParticles({
  * Floating grid rings for depth perception.
  * Adds subtle "financial chart" aesthetic.
  */
-function GridRings({ animated = true, scale = 1 }: { animated: boolean; scale: number }) {
+function GridRings({
+  animated = true,
+  scale = 1,
+  isDark = false,
+}: {
+  animated: boolean;
+  scale: number;
+  isDark?: boolean;
+}) {
   const ring1Ref = useRef<THREE.Mesh>(null);
   const ring2Ref = useRef<THREE.Mesh>(null);
+  const palette = isDark ? COLORS.dark : COLORS.light;
 
   useFrame((state) => {
     if (!animated) return;
@@ -129,11 +161,11 @@ function GridRings({ animated = true, scale = 1 }: { animated: boolean; scale: n
     <>
       <mesh ref={ring1Ref} position={[0, 0, 0]}>
         <torusGeometry args={[4 * scale, 0.01, 16, 64]} />
-        <meshBasicMaterial color="#3B82F6" transparent opacity={0.2} />
+        <meshBasicMaterial color={palette.ring} transparent opacity={isDark ? 0.3 : 0.2} />
       </mesh>
       <mesh ref={ring2Ref} position={[0, 0, 0]}>
         <torusGeometry args={[5 * scale, 0.01, 16, 64]} />
-        <meshBasicMaterial color="#3B82F6" transparent opacity={0.15} />
+        <meshBasicMaterial color={palette.ring} transparent opacity={isDark ? 0.25 : 0.15} />
       </mesh>
     </>
   );
@@ -143,6 +175,10 @@ function GridRings({ animated = true, scale = 1 }: { animated: boolean; scale: n
  * Main 3D scene for the hero section.
  * Features a glassy distorted sphere with orbiting particles.
  * "Finance x Physics" aesthetic - clean, professional, subtle.
+ *
+ * Supports:
+ * - Dark/light mode color switching
+ * - Scroll-linked parallax (orb rises/sinks based on scroll)
  */
 export default function HeroScene({
   speed = 1,
@@ -150,35 +186,51 @@ export default function HeroScene({
   orbSize = 2.5,
   animated = true,
   scale = 1,
+  scrollProgress = 0,
+  isDark = false,
 }: HeroSceneProps) {
   const sphereRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<THREE.Group>(null);
+  const palette = isDark ? COLORS.dark : COLORS.light;
 
-  // Subtle sphere animation
+  // Animate sphere and apply scroll-linked parallax
   useFrame((state) => {
     if (!sphereRef.current || !animated) return;
 
     // Gentle rotation
     sphereRef.current.rotation.y = state.clock.elapsedTime * 0.2 * speed;
     sphereRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3 * speed) * 0.1;
+
+    // Scroll-linked parallax: move the entire scene up as user scrolls down
+    if (groupRef.current) {
+      // Move orb up by 3 units as scroll progress goes from 0 to 1
+      const targetY = scrollProgress * 3;
+      // Also slightly scale down and increase opacity
+      const targetScale = 1 - scrollProgress * 0.2;
+
+      // Smooth interpolation
+      groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, targetY, 0.1);
+      groupRef.current.scale.setScalar(THREE.MathUtils.lerp(groupRef.current.scale.x, targetScale, 0.1));
+    }
   });
 
   return (
-    <>
+    <group ref={groupRef}>
       {/* Ambient lighting for soft shadows */}
-      <ambientLight intensity={0.4} />
+      <ambientLight intensity={isDark ? 0.5 : 0.4} />
 
-      {/* Key light - subtle blue tint */}
+      {/* Key light - adjusts based on theme */}
       <directionalLight
         position={[10, 10, 5]}
-        intensity={0.8}
-        color="#E0E7FF"
+        intensity={isDark ? 1.0 : 0.8}
+        color={palette.keyLight}
       />
 
       {/* Fill light from opposite side */}
       <directionalLight
         position={[-10, -5, -5]}
-        intensity={0.3}
-        color="#3B82F6"
+        intensity={isDark ? 0.5 : 0.3}
+        color={palette.fillLight}
       />
 
       {/* Central floating orb - glassy material */}
@@ -189,9 +241,9 @@ export default function HeroScene({
       >
         <Sphere ref={sphereRef} args={[orbSize * scale, 64, 64]}>
           <MeshDistortMaterial
-            color="#1E40AF"
+            color={palette.sphere}
             transparent
-            opacity={0.6}
+            opacity={isDark ? 0.7 : 0.6}
             roughness={0.1}
             metalness={0.8}
             distort={animated ? 0.3 : 0}
@@ -202,9 +254,9 @@ export default function HeroScene({
         {/* Inner glow sphere */}
         <Sphere args={[orbSize * scale * 0.8, 32, 32]}>
           <meshBasicMaterial
-            color="#60A5FA"
+            color={palette.innerGlow}
             transparent
-            opacity={0.15}
+            opacity={isDark ? 0.2 : 0.15}
           />
         </Sphere>
       </Float>
@@ -214,10 +266,11 @@ export default function HeroScene({
         count={particleCount}
         animated={animated}
         scale={scale}
+        isDark={isDark}
       />
 
       {/* Subtle grid rings */}
-      <GridRings animated={animated} scale={scale} />
-    </>
+      <GridRings animated={animated} scale={scale} isDark={isDark} />
+    </group>
   );
 }

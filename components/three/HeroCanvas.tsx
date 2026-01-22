@@ -2,6 +2,7 @@
 
 import { Suspense, lazy, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useTheme } from 'next-themes';
 import { usePrefersReducedMotion, useIsMobile } from '@/hooks/usePrefersReducedMotion';
 
 /**
@@ -20,6 +21,14 @@ const Canvas = dynamic(
  */
 const HeroScene = lazy(() => import('./HeroScene'));
 
+/**
+ * Lazy-loaded Stats component for FPS monitoring (dev mode only).
+ */
+const Stats = dynamic(
+  () => import('@react-three/drei').then((mod) => mod.Stats),
+  { ssr: false }
+);
+
 interface HeroCanvasProps {
   className?: string;
 }
@@ -28,24 +37,30 @@ interface HeroCanvasProps {
  * Static fallback for reduced-motion users.
  * Displays a clean gradient with subtle visual interest.
  */
-function StaticFallback() {
+function StaticFallback({ isDark }: { isDark: boolean }) {
   return (
     <div className="absolute inset-0 overflow-hidden">
       {/* Gradient orb effect - CSS only, no animation */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[600px] md:h-[600px]"
         style={{
-          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(30, 64, 175, 0.1) 50%, transparent 70%)',
+          background: isDark
+            ? 'radial-gradient(circle, rgba(96, 165, 250, 0.4) 0%, rgba(59, 130, 246, 0.15) 50%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(30, 64, 175, 0.1) 50%, transparent 70%)',
           filter: 'blur(40px)',
         }}
       />
 
       {/* Subtle ring decorations */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full border border-accent-500/20"
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] rounded-full border ${
+          isDark ? 'border-accent-400/30' : 'border-accent-500/20'
+        }`}
       />
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[850px] md:h-[850px] rounded-full border border-accent-500/10"
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[850px] md:h-[850px] rounded-full border ${
+          isDark ? 'border-accent-400/20' : 'border-accent-500/10'
+        }`}
       />
     </div>
   );
@@ -67,6 +82,31 @@ function LoadingState() {
 }
 
 /**
+ * Custom hook to track scroll progress within the hero section.
+ * Returns a value from 0 (top) to 1 (scrolled past hero).
+ */
+function useScrollProgress() {
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Calculate scroll progress based on viewport height
+      const viewportHeight = window.innerHeight;
+      const scrollY = window.scrollY;
+
+      // Progress from 0 to 1 as user scrolls through first viewport
+      const progress = Math.min(scrollY / viewportHeight, 1);
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return scrollProgress;
+}
+
+/**
  * HeroCanvas - The main 3D background component for the hero section.
  *
  * Features:
@@ -74,6 +114,9 @@ function LoadingState() {
  * - Respects prefers-reduced-motion
  * - Mobile optimizations (reduced particle count, lower DPR)
  * - Graceful loading and error states
+ * - Dark mode support with adjusted colors
+ * - Scroll-linked parallax effect
+ * - FPS counter in development mode
  *
  * Tuning parameters (edit HeroScene.tsx):
  * - speed: Animation speed multiplier (default: 1)
@@ -83,12 +126,16 @@ function LoadingState() {
 export default function HeroCanvas({ className = '' }: HeroCanvasProps) {
   const prefersReducedMotion = usePrefersReducedMotion();
   const isMobile = useIsMobile();
+  const { resolvedTheme } = useTheme();
+  const scrollProgress = useScrollProgress();
   const [isClient, setIsClient] = useState(false);
   const [hasWebGL, setHasWebGL] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   // Ensure we're on the client before rendering 3D content
   useEffect(() => {
     setIsClient(true);
+    setMounted(true);
 
     // Check WebGL support
     try {
@@ -99,6 +146,8 @@ export default function HeroCanvas({ className = '' }: HeroCanvasProps) {
       setHasWebGL(false);
     }
   }, []);
+
+  const isDark = mounted ? resolvedTheme === 'dark' : false;
 
   // Don't render anything during SSR
   if (!isClient) {
@@ -111,7 +160,7 @@ export default function HeroCanvas({ className = '' }: HeroCanvasProps) {
   if (prefersReducedMotion || !hasWebGL) {
     return (
       <div className={`absolute inset-0 ${className}`}>
-        <StaticFallback />
+        <StaticFallback isDark={isDark} />
       </div>
     );
   }
@@ -134,6 +183,9 @@ export default function HeroCanvas({ className = '' }: HeroCanvasProps) {
 
   const config = isMobile ? mobileConfig : desktopConfig;
 
+  // Show FPS counter only in development
+  const showStats = process.env.NODE_ENV === 'development';
+
   return (
     <div className={`absolute inset-0 ${className}`}>
       <Suspense fallback={<LoadingState />}>
@@ -147,12 +199,17 @@ export default function HeroCanvas({ className = '' }: HeroCanvasProps) {
             powerPreference: 'high-performance',
           }}
         >
+          {/* FPS counter in dev mode */}
+          {showStats && <Stats className="!absolute !left-auto !right-0 !top-16" />}
+
           <HeroScene
             speed={1}
             particleCount={config.particleCount}
             orbSize={2.5}
             animated={true}
             scale={config.scale}
+            scrollProgress={scrollProgress}
+            isDark={isDark}
           />
         </Canvas>
       </Suspense>
