@@ -1,0 +1,257 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import ScrollReveal from "@/components/animations/ScrollReveal";
+import { projects, Project } from "@/lib/data/projects";
+import { staggerContainer, fadeInUp } from "@/lib/animations";
+
+const categories = ["All", "Financial Modeling", "Data Analysis", "Algo Trading", "Equity Research"];
+
+function ProjectCard({ project }: { project: Project }) {
+  const [showDetails, setShowDetails] = useState(false);
+
+  return (
+    <>
+      <motion.div
+        variants={fadeInUp}
+        whileHover={{ y: -8 }}
+        transition={{ duration: 0.3 }}
+        className="h-full"
+      >
+        <Card className="h-full flex flex-col hover:shadow-xl transition-shadow cursor-pointer overflow-hidden group">
+          {/* Image Placeholder */}
+          <div className="h-48 bg-gradient-to-br from-accent-500 to-primary-900 relative overflow-hidden">
+            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+              <span className="text-white text-4xl font-bold opacity-50">
+                {project.category === "Financial Modeling" && "📊"}
+                {project.category === "Data Analysis" && "📈"}
+                {project.category === "Algo Trading" && "🤖"}
+                {project.category === "Equity Research" && "🔍"}
+              </span>
+            </div>
+            {project.featured && (
+              <Badge className="absolute top-4 right-4 bg-success-500">
+                Featured
+              </Badge>
+            )}
+          </div>
+
+          <CardHeader className="flex-1">
+            <div className="flex items-start justify-between gap-2 mb-2">
+              <Badge variant="outline">{project.category}</Badge>
+            </div>
+            <CardTitle className="text-xl group-hover:text-accent-600 transition-colors">
+              {project.title}
+            </CardTitle>
+            <CardDescription>{project.description}</CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            <div className="space-y-3">
+              <div>
+                <h4 className="text-sm font-semibold text-primary-900 mb-2">
+                  Skills
+                </h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {project.skills.slice(0, 4).map((skill) => (
+                    <Badge key={skill} variant="secondary" className="text-xs">
+                      {skill}
+                    </Badge>
+                  ))}
+                  {project.skills.length > 4 && (
+                    <Badge variant="secondary" className="text-xs">
+                      +{project.skills.length - 4}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-semibold text-primary-900 mb-2">
+                  Tech Stack
+                </h4>
+                <p className="text-sm text-primary-600">
+                  {project.techStack.join(", ")}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+
+          <CardFooter className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              className="flex-1"
+              onClick={() => setShowDetails(true)}
+            >
+              View Details
+            </Button>
+            {project.github && (
+              <Button size="sm" variant="ghost" asChild>
+                <a href={project.github} target="_blank" rel="noopener noreferrer">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                  </svg>
+                </a>
+              </Button>
+            )}
+          </CardFooter>
+        </Card>
+      </motion.div>
+
+      {/* Details Modal */}
+      <AnimatePresence>
+        {showDetails && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            onClick={() => setShowDetails(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-6 space-y-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-2xl font-bold text-primary-900">{project.title}</h3>
+                    <Badge variant="outline" className="mt-2">{project.category}</Badge>
+                  </div>
+                  <button
+                    onClick={() => setShowDetails(false)}
+                    className="text-primary-400 hover:text-primary-900"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <p className="text-primary-700">
+                  {project.longDescription || project.description}
+                </p>
+
+                {project.outcomes && (
+                  <div>
+                    <h4 className="font-semibold text-primary-900 mb-2">Key Outcomes</h4>
+                    <ul className="list-disc list-inside space-y-1 text-primary-600">
+                      {project.outcomes.map((outcome, i) => (
+                        <li key={i}>{outcome}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <div>
+                  <h4 className="font-semibold text-primary-900 mb-2">Skills</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {project.skills.map((skill) => (
+                      <Badge key={skill} variant="secondary">{skill}</Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-primary-900 mb-2">Tech Stack</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {project.techStack.map((tech) => (
+                      <Badge key={tech}>{tech}</Badge>
+                    ))}
+                  </div>
+                </div>
+
+                {(project.github || project.link) && (
+                  <div className="flex gap-2 pt-4">
+                    {project.github && (
+                      <Button asChild>
+                        <a href={project.github} target="_blank" rel="noopener noreferrer">
+                          View on GitHub
+                        </a>
+                      </Button>
+                    )}
+                    {project.link && (
+                      <Button variant="outline" asChild>
+                        <a href={project.link} target="_blank" rel="noopener noreferrer">
+                          View Live Demo
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+export default function Projects() {
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const filteredProjects = activeCategory === "All"
+    ? projects
+    : projects.filter((p) => p.category === activeCategory);
+
+  return (
+    <section id="projects" className="py-20 px-6 bg-white">
+      <div className="max-w-7xl mx-auto">
+        <ScrollReveal>
+          <h2 className="text-4xl md:text-5xl font-bold text-primary-900 mb-4 text-center">
+            Projects
+          </h2>
+          <div className="w-20 h-1 bg-accent-500 mx-auto mb-6" />
+          <p className="text-center text-primary-600 mb-12 max-w-2xl mx-auto">
+            Hands-on projects demonstrating financial modeling, data analysis,
+            and quantitative research skills.
+          </p>
+        </ScrollReveal>
+
+        {/* Category Filter */}
+        <ScrollReveal delay={0.2}>
+          <div className="flex flex-wrap gap-2 justify-center mb-12">
+            {categories.map((category) => (
+              <Button
+                key={category}
+                variant={activeCategory === category ? "default" : "outline"}
+                onClick={() => setActiveCategory(category)}
+                size="sm"
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
+        </ScrollReveal>
+
+        {/* Projects Grid */}
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {filteredProjects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+        </motion.div>
+
+        {filteredProjects.length === 0 && (
+          <p className="text-center text-primary-500 py-12">
+            No projects found in this category.
+          </p>
+        )}
+      </div>
+    </section>
+  );
+}

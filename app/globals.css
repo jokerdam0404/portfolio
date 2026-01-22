@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-geist-sans: 'Geist Sans', system-ui, -apple-system, sans-serif;
+    --font-geist-mono: 'Geist Mono', 'SF Mono', 'Roboto Mono', monospace;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-primary-50 text-primary-900 font-sans antialiased;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Custom gradient background for hero */
+  .gradient-bg {
+    background: linear-gradient(
+      135deg,
+      #0F172A 0%,
+      #1E293B 25%,
+      #334155 50%,
+      #1E293B 75%,
+      #0F172A 100%
+    );
+    background-size: 400% 400%;
+  }
+
+  /* Animated gradient */
+  .gradient-animated {
+    animation: gradient 15s ease infinite;
+  }
+
+  @keyframes gradient {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-white/10 backdrop-blur-lg border border-white/20;
+  }
+
+  /* Card hover effect */
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-2xl;
+  }
+}
