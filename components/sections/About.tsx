@@ -57,7 +57,7 @@ export default function About() {
               </h3>
               <div className="space-y-4 text-primary-700 leading-relaxed">
                 <p>
-                  I'm a dual-degree student at Northeastern University and Michigan State University,
+                  I&apos;m a dual-degree student at Northeastern University and Michigan State University,
                   combining rigorous training in Physics with a deep passion for Finance and Economics.
                   Currently, I co-manage a $5 million mid-cap fund as an Equity Analyst, where I develop
                   DCF models and perform comprehensive financial statement analysis.
@@ -70,7 +70,7 @@ export default function About() {
                 </p>
                 <p>
                   With experience in Python, C++, financial modeling, and a proven track record in
-                  both research and finance, I'm seeking opportunities in equity research, quantitative
+                  both research and finance, I&apos;m seeking opportunities in equity research, quantitative
                   finance, and investment banking where I can leverage my analytical skills to drive
                   data-driven investment decisions.
                 </p>

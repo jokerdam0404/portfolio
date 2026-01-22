@@ -80,15 +80,13 @@ export default function Navigation() {
                 {link.name}
               </Button>
             ))}
-            <Button
-              className="ml-4 bg-accent-500 hover:bg-accent-600 text-white"
-              size="sm"
-              asChild
+            <a
+              href="/resume.pdf"
+              download
+              className="ml-4 inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 h-9 px-3 bg-accent-500 text-white hover:bg-accent-600"
             >
-              <a href="/resume.pdf" download>
-                Resume
-              </a>
-            </Button>
+              Resume
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -150,14 +148,13 @@ export default function Navigation() {
                     {link.name}
                   </Button>
                 ))}
-                <Button
-                  className="w-full bg-accent-500 hover:bg-accent-600 text-white"
-                  asChild
+                <a
+                  href="/resume.pdf"
+                  download
+                  className="w-full inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 h-10 px-4 py-2 bg-accent-500 text-white hover:bg-accent-600"
                 >
-                  <a href="/resume.pdf" download>
-                    Download Resume
-                  </a>
-                </Button>
+                  Download Resume
+                </a>
               </div>
             </motion.div>
           )}
