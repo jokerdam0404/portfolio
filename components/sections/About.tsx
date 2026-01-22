@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
+import { Headshot } from "@/components/ui/headshot";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
@@ -28,23 +29,42 @@ export default function About() {
         </ScrollReveal>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left: Image/Avatar Placeholder */}
+          {/* Left: Headshot with gradient frame */}
           <ScrollReveal delay={0.2}>
-            <div className="relative">
-              <div className="aspect-square rounded-2xl bg-gradient-to-br from-accent-500 to-primary-900 p-1">
-                <div className="w-full h-full rounded-2xl bg-primary-50 flex items-center justify-center">
-                  {/* Replace with actual image */}
-                  <div className="text-center">
-                    <div className="w-48 h-48 mx-auto mb-4 rounded-full bg-primary-200 flex items-center justify-center">
-                      <span className="text-6xl font-bold text-primary-600">
-                        AC
-                      </span>
-                    </div>
-                    <p className="text-primary-500 text-sm">
-                      Add your professional photo here
-                    </p>
-                  </div>
+            <div className="relative flex justify-center">
+              {/* Gradient border frame */}
+              <div className="relative">
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: "linear-gradient(135deg, #3B82F6 0%, #1E40AF 50%, #0F172A 100%)",
+                    padding: "4px",
+                    transform: "scale(1.03)",
+                  }}
+                />
+                {/*
+                  Headshot component with fallback.
+                  To add your photo:
+                  1. Add your image to /public/images/headshot.jpg (or .png)
+                  2. Update the src prop below to "/images/headshot.jpg"
+                */}
+                <div className="relative bg-primary-50 rounded-full p-1">
+                  <Headshot
+                    // src="/images/headshot.jpg" // Uncomment and update when you have your photo
+                    alt="Achintya Chaganti"
+                    size={280}
+                    initials="AC"
+                    className="shadow-xl"
+                  />
                 </div>
+
+                {/* Decorative elements */}
+                <div
+                  className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-accent-500/10 -z-10"
+                />
+                <div
+                  className="absolute -bottom-6 -left-6 w-32 h-32 rounded-full bg-primary-900/5 -z-10"
+                />
               </div>
             </div>
           </ScrollReveal>
@@ -89,7 +109,7 @@ export default function About() {
                   viewport={{ once: true }}
                   className="flex flex-wrap gap-2"
                 >
-                  {interests.map((interest, index) => (
+                  {interests.map((interest) => (
                     <motion.div key={interest} variants={fadeInUp}>
                       <Badge variant="outline" className="text-sm py-1.5 px-3">
                         {interest}
