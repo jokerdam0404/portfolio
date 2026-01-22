@@ -60,7 +60,7 @@ export default function Navigation() {
             }}
             whileHover={{ scale: 1.05 }}
           >
-            YN
+            AC
           </motion.a>
 
           {/* Desktop Navigation */}

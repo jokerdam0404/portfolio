@@ -14,6 +14,7 @@ const categoryColors = {
   Book: "bg-primary-600",
   Project: "bg-accent-600",
   Learning: "bg-primary-500",
+  Role: "bg-success-600",
 };
 
 function TimelineCard({ milestone, index }: { milestone: JourneyMilestone; index: number }) {

@@ -73,19 +73,19 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
         >
           <h1 className="text-6xl md:text-8xl font-bold text-white mb-6">
-            Your Name
+            Achintya Chaganti
           </h1>
 
           <div className="text-2xl md:text-3xl text-white/90 mb-8 h-12">
             <TypeAnimation
               sequence={[
-                "Aspiring Investment Banker",
+                "Physics & Economics Student",
                 2000,
-                "Finance Enthusiast",
+                "Equity Analyst",
                 2000,
-                "Financial Modeling Expert",
+                "Financial Modeling Specialist",
                 2000,
-                "Data-Driven Analyst",
+                "Undergraduate Researcher",
                 2000,
               ]}
               wrapper="span"
@@ -95,9 +95,9 @@ export default function Hero() {
           </div>
 
           <p className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto">
-            Passionate about finance, valuation, and leveraging data to drive
-            investment decisions. Building expertise in financial modeling,
-            equity research, and quantitative analysis.
+            Physics and Economics student passionate about equity research and financial modeling.
+            Currently managing a $5M mid-cap fund and conducting advanced physics simulations.
+            Seeking opportunities in finance and quantitative analysis.
           </p>
 
           <div className="flex gap-4 justify-center flex-wrap">

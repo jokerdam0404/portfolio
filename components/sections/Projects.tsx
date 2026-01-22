@@ -9,7 +9,7 @@ import ScrollReveal from "@/components/animations/ScrollReveal";
 import { projects, Project } from "@/lib/data/projects";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
 
-const categories = ["All", "Financial Modeling", "Data Analysis", "Algo Trading", "Equity Research"];
+const categories = ["All", "Financial Modeling", "Equity Research", "Data Analysis", "Computational Physics", "Cloud Computing"];
 
 function ProjectCard({ project }: { project: Project }) {
   const [showDetails, setShowDetails] = useState(false);
@@ -29,8 +29,9 @@ function ProjectCard({ project }: { project: Project }) {
               <span className="text-white text-4xl font-bold opacity-50">
                 {project.category === "Financial Modeling" && "📊"}
                 {project.category === "Data Analysis" && "📈"}
-                {project.category === "Algo Trading" && "🤖"}
+                {project.category === "Computational Physics" && "⚛️"}
                 {project.category === "Equity Research" && "🔍"}
+                {project.category === "Cloud Computing" && "☁️"}
               </span>
             </div>
             {project.featured && (

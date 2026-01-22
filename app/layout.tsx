@@ -5,13 +5,13 @@ import Navigation from "@/components/Navigation";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Finance Portfolio | Your Name",
-  description: "Personal portfolio showcasing my finance journey, projects, and experience in investment banking, financial modeling, and quantitative analysis.",
-  keywords: ["finance", "investment banking", "portfolio", "financial modeling", "valuation"],
-  authors: [{ name: "Your Name" }],
+  title: "Achintya Chaganti | Physics & Economics Student | Equity Analyst",
+  description: "Achintya Chaganti - Physics and Economics student at Northeastern University and Michigan State University. Equity Analyst managing a $5M fund, undergraduate researcher, and aspiring finance professional.",
+  keywords: ["Achintya Chaganti", "equity research", "financial modeling", "physics", "economics", "quantitative finance", "portfolio management", "DCF valuation"],
+  authors: [{ name: "Achintya Chaganti" }],
   openGraph: {
-    title: "Finance Portfolio | Your Name",
-    description: "Personal portfolio showcasing my finance journey",
+    title: "Achintya Chaganti | Physics & Economics | Equity Analyst",
+    description: "Physics and Economics student passionate about equity research and financial modeling",
     type: "website",
   },
 };

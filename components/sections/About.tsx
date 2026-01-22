@@ -7,14 +7,14 @@ import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 export default function About() {
   const interests = [
-    "Investment Banking",
-    "Financial Modeling",
     "Equity Research",
-    "Valuation",
-    "M&A Analysis",
-    "Data Analysis",
-    "Python for Finance",
+    "Financial Modeling",
+    "Valuation (DCF, LBO)",
+    "Quantitative Finance",
     "Portfolio Management",
+    "Data Analysis",
+    "Computational Physics",
+    "Investment Banking",
   ];
 
   return (
@@ -37,7 +37,7 @@ export default function About() {
                   <div className="text-center">
                     <div className="w-48 h-48 mx-auto mb-4 rounded-full bg-primary-200 flex items-center justify-center">
                       <span className="text-6xl font-bold text-primary-600">
-                        YN
+                        AC
                       </span>
                     </div>
                     <p className="text-primary-500 text-sm">
@@ -53,27 +53,26 @@ export default function About() {
           <div>
             <ScrollReveal delay={0.3}>
               <h3 className="text-2xl font-semibold text-primary-900 mb-4">
-                Finance Student & Aspiring Investment Banker
+                Physics & Economics Student | Equity Analyst
               </h3>
               <div className="space-y-4 text-primary-700 leading-relaxed">
                 <p>
-                  I'm a finance student passionate about investment banking,
-                  financial modeling, and data-driven decision making. With
-                  hands-on experience in building valuation models and
-                  conducting equity research, I bring both technical skills and
-                  financial acumen to every project.
+                  I'm a dual-degree student at Northeastern University and Michigan State University,
+                  combining rigorous training in Physics with a deep passion for Finance and Economics.
+                  Currently, I co-manage a $5 million mid-cap fund as an Equity Analyst, where I develop
+                  DCF models and perform comprehensive financial statement analysis.
                 </p>
                 <p>
-                  My journey in finance has been driven by curiosity and a
-                  commitment to continuous learning. From mastering Excel and
-                  Python to understanding complex financial instruments, I
-                  thrive on solving challenging problems and uncovering
-                  insights from data.
+                  My unique background bridges quantitative research and financial analysis. As an
+                  undergraduate researcher at Aramaki Lab, I work with advanced simulation tools
+                  (Geant4, ROOT, C++) for particle physics studies, developing the same analytical
+                  rigor I apply to equity valuation and investment decisions.
                 </p>
                 <p>
-                  Currently, I'm preparing for the CFA Level 1 exam and seeking
-                  opportunities in investment banking and equity research where
-                  I can contribute to deal execution and investment analysis.
+                  With experience in Python, C++, financial modeling, and a proven track record in
+                  both research and finance, I'm seeking opportunities in equity research, quantitative
+                  finance, and investment banking where I can leverage my analytical skills to drive
+                  data-driven investment decisions.
                 </p>
               </div>
             </ScrollReveal>
