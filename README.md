@@ -1,27 +1,33 @@
 # Finance-Focused Personal Portfolio Website
 
-A cutting-edge, highly interactive personal portfolio website showcasing your finance journey, built with Next.js 15, TypeScript, Tailwind CSS, Framer Motion, and GSAP.
+A cutting-edge, highly interactive personal portfolio website showcasing your finance journey, built with Next.js 15, TypeScript, Tailwind CSS, React Three Fiber, and Framer Motion.
 
 ## Features
 
 - **Modern Tech Stack**: Next.js 15, React 19, TypeScript
-- **Stunning Animations**: Combined Framer Motion & GSAP for professional effects
+- **Cinematic 3D Hero**: Scroll-driven journey through stairs → black hole → trading floor
+- **Premium Typography**: Space Grotesk (display) + Inter (body) + JetBrains Mono (numeric)
+- **Token-Based Theming**: CSS variables for easy customization of colors, spacing, and effects
+- **Stunning Animations**: React Three Fiber, Framer Motion & GSAP for professional effects
 - **Finance-Optimized Design**: Professional color scheme suitable for IB/PE/HF applications
-- **Fully Responsive**: Mobile-first design that works on all devices
+- **Fully Responsive**: Mobile-first design with optimizations for all devices
 - **Easy Content Management**: All content in separate data files for easy updates
 - **SEO Optimized**: Built-in metadata and Open Graph tags
-- **Performance Focused**: Optimized for Lighthouse scores >90
+- **Accessibility**: Reduced motion support, keyboard navigation, proper focus states
 
 ## Sections
 
-1. **Hero** - Full-screen landing with animated gradient background
+1. **Hero** - Cinematic 3D scroll-driven experience with three scenes:
+   - Scene A: Walking up stairs (ascent/ambition)
+   - Scene B: Black hole warp tunnel (transition/transformation)
+   - Scene C: Trading floor emergence (arrival/success)
 2. **About** - Professional introduction with skills overview
-3. **Finance Journey** - Interactive timeline of your learning path (unique!)
+3. **Finance Journey** - Interactive timeline of your learning path
 4. **Projects** - Grid of finance projects with filtering
 5. **Experience** - Professional work experience
 6. **Skills** - Animated skill bars by category
 7. **Education** - Academic background and certifications
-8. **Contact** - Social links and resume download
+8. **Contact** - Social links, contact form, and resume download
 
 ## Getting Started
 
@@ -49,119 +55,137 @@ npm run dev
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Customizing Your Portfolio
+## Customization Guide
 
-### 1. Personal Information
+### Theme Tokens (Colors, Typography, Spacing)
 
-Update these key files with your information:
+The theme system uses CSS variables defined in `app/globals.css`. Edit these to customize the entire site:
 
-#### Hero Section
-Edit `components/sections/Hero.tsx`:
-- Line 65: Change "Your Name" to your actual name
-- Line 72-79: Customize the typing animation text
-- Line 84-87: Update the description
+```css
+:root {
+  /* Background colors */
+  --bg: 250 250 252;           /* Main background */
+  --bg-deep: 240 242 247;       /* Alternating section background */
+  --surface: 255 255 255;       /* Card surfaces */
 
-#### About Section
-Edit `components/sections/About.tsx`:
-- Line 77-101: Update your bio and interests
-- Add your photo: Replace the placeholder in lines 56-64
+  /* Text colors */
+  --text: 15 23 42;             /* Primary text */
+  --text-secondary: 71 85 105;  /* Secondary text */
+  --text-muted: 148 163 184;    /* Muted text */
 
-#### Navigation & Layout
-Edit `app/layout.tsx`:
-- Line 7: Update page title
-- Line 8: Update description
-- Line 10: Update author name
+  /* Accent colors */
+  --accent: 59 130 246;         /* Primary accent (blue) */
+  --accent2: 16 185 129;        /* Secondary accent (emerald) */
 
-### 2. Content Data Files
+  /* Effects */
+  --glow: 59 130 246;           /* Glow color for focus states */
+}
 
-All content is in `lib/data/` - just edit the TypeScript objects:
-
-#### Finance Journey (`lib/data/journey.ts`)
-Add/edit milestones:
-```typescript
-{
-  id: 1,
-  date: "2024-01",
-  title: "Your milestone title",
-  category: "Course" | "Certification" | "Book" | "Project" | "Learning",
-  description: "Description of what you did",
-  skills: ["Skill 1", "Skill 2"],
-  resources: ["Resource 1", "Resource 2"],
+.dark {
+  /* Dark mode overrides... */
 }
 ```
 
-#### Projects (`lib/data/projects.ts`)
-Add/edit projects:
-```typescript
-{
-  id: 1,
-  title: "Project Name",
-  category: "Financial Modeling" | "Data Analysis" | "Algo Trading" | "Equity Research",
-  description: "Short description",
-  skills: ["Excel", "Python"],
-  techStack: ["Excel", "Bloomberg"],
-  github: "https://github.com/...",
-  featured: true,
+### Typography
+
+Fonts are loaded in `app/layout.tsx` using `next/font/google`:
+
+- **Display Font** (Space Grotesk): Used for headings, hero text
+- **Body Font** (Inter): Used for body text, paragraphs
+- **Mono Font** (JetBrains Mono): Used for code, numbers
+
+To change fonts:
+1. Edit `app/layout.tsx` to import different fonts from `next/font/google`
+2. Update CSS variables `--font-display`, `--font-body`, `--font-mono` in `globals.css`
+
+### Hero Timeline & 3D Scene
+
+The cinematic hero is in `components/hero/`:
+
+```
+components/hero/
+├── CinematicHero.tsx    # Main wrapper with scroll logic
+├── CinematicCanvas.tsx  # 3D canvas with all three scenes
+├── HeroOverlay.tsx      # Text content overlay
+└── index.ts             # Exports
+```
+
+**To adjust scroll timing:**
+Edit `CinematicHero.tsx`:
+- Scene duration is based on 3x viewport height of scrolling
+- Modify `heroHeight` calculation to change total scroll length
+
+**To adjust camera movement:**
+Edit `CinematicCanvas.tsx` in the `CinematicScene` component:
+- `pos1`, `pos2`, `pos3`: Camera positions for each scene
+- `lookAt1`, `lookAt2`, `lookAt3`: Camera look-at targets
+- `baseFov`, `tunnelFov`: Field of view values
+
+**To adjust scene content:**
+Each scene is a separate component in `CinematicCanvas.tsx`:
+- `StairsScene`: Stairs geometry, walking figure, particles
+- `BlackHoleScene`: Tunnel particles, accretion disk, light beams
+- `TradingFloorScene`: Monitor walls, desks, ticker tape
+
+### Postprocessing Effects
+
+Effects are configured in `CinematicCanvas.tsx`:
+```tsx
+<EffectComposer>
+  <Bloom intensity={0.5} luminanceThreshold={0.6} />
+  <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={3} />
+  <Vignette offset={0.1} darkness={0.5} />
+  <Noise opacity={0.015} />
+</EffectComposer>
+```
+
+Adjust values to change the visual feel. Remove effects for better performance on low-end devices.
+
+### Replacing 3D Assets
+
+**To use custom 3D models:**
+
+1. Add GLTF/GLB files to `public/models/`
+2. Use `@react-three/drei`'s `useGLTF` hook:
+```tsx
+import { useGLTF } from '@react-three/drei';
+
+function CustomModel() {
+  const { scene } = useGLTF('/models/your-model.glb');
+  return <primitive object={scene} />;
 }
 ```
 
-#### Experience (`lib/data/experience.ts`)
-Add/edit work experience:
-```typescript
-{
-  id: 1,
-  company: "Company Name",
-  role: "Job Title",
-  location: "City, State",
-  startDate: "2024-06",
-  endDate: "2024-08",
-  current: false,
-  achievements: ["Achievement 1", "Achievement 2"],
-  skills: ["Skill 1", "Skill 2"],
-}
+**To optimize 3D assets:**
+```bash
+# Install gltf-transform CLI
+npm install -g @gltf-transform/cli
+
+# Compress with Draco
+gltf-transform draco input.glb output.glb
+
+# Or with Meshopt
+gltf-transform meshopt input.glb output.glb
 ```
 
-#### Skills (`lib/data/skills.ts`)
-Add/edit skills:
-```typescript
-{
-  name: "Financial Modeling",
-  category: "Finance" | "Technical" | "Tools" | "Soft Skills",
-  proficiency: 90, // 1-100
-  description: "Optional description",
-}
-```
+### Content Data Files
 
-#### Education (`lib/data/education.ts`)
-Update your education and certifications.
+All content is in `lib/data/` - edit the TypeScript objects:
 
-### 3. Add Your Resume
+- `journey.ts` - Finance journey milestones
+- `projects.ts` - Portfolio projects
+- `experience.ts` - Work experience
+- `skills.ts` - Skills by category
+- `education.ts` - Education and certifications
 
-Replace `public/resume.pdf` with your actual resume PDF file.
-
-### 4. Update Contact Information
+### Contact Information
 
 Edit `components/sections/Contact.tsx`:
 - Line 32: Update email
 - Line 47: Update LinkedIn URL
 - Line 54: Update GitHub URL
-- Line 61: Update email
 
-### 5. Add Images
-
-Add images to `public/images/` and reference them:
-- Profile photo for About section
-- Project screenshots
-- Company logos
-
-## Color Customization
-
-The color scheme is defined in `tailwind.config.ts`:
-- **Primary**: Deep Navy (#0F172A) - Professional background
-- **Accent**: Electric Blue (#3B82F6) - Call-to-action buttons
-- **Success**: Emerald (#10B981) - Positive indicators
-
-To change colors, edit the `colors` section in `tailwind.config.ts`.
+The H-1B1 badge in the hero and contact sections links to the DOL H-1B1 information page.
 
 ## Building for Production
 
@@ -180,27 +204,21 @@ npm start
 4. Vercel will auto-detect Next.js and deploy
 5. Your site will be live at `https://your-project.vercel.app`
 
-#### Custom Domain
-1. In Vercel dashboard, go to Settings → Domains
-2. Add your custom domain
-3. Follow DNS configuration instructions
-
-### Other Deployment Options
-- **Netlify**: Similar to Vercel, auto-detects Next.js
-- **AWS Amplify**: For AWS-integrated workflows
-- **Self-hosted**: Build and deploy to your own server
-
 ## Project Structure
 
 ```
 finance-portfolio/
 ├── app/                      # Next.js app directory
-│   ├── layout.tsx           # Root layout
+│   ├── layout.tsx           # Root layout with fonts
 │   ├── page.tsx             # Home page
-│   └── globals.css          # Global styles
+│   └── globals.css          # Theme tokens & global styles
 ├── components/
+│   ├── hero/                # Cinematic 3D hero
+│   │   ├── CinematicHero.tsx
+│   │   ├── CinematicCanvas.tsx
+│   │   └── HeroOverlay.tsx
 │   ├── sections/            # Page sections
-│   │   ├── Hero.tsx
+│   │   ├── Hero.tsx         # Hero wrapper
 │   │   ├── About.tsx
 │   │   ├── FinanceJourney.tsx
 │   │   ├── Projects.tsx
@@ -208,45 +226,44 @@ finance-portfolio/
 │   │   ├── Skills.tsx
 │   │   ├── Education.tsx
 │   │   └── Contact.tsx
+│   ├── three/               # Legacy 3D components
 │   ├── ui/                  # Reusable UI components
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   └── badge.tsx
-│   ├── animations/          # Animation wrappers
-│   └── Navigation.tsx       # Navigation bar
+│   └── animations/          # Animation wrappers
+├── hooks/                   # Custom React hooks
+│   └── usePrefersReducedMotion.ts
 ├── lib/
 │   ├── data/               # Content data files
-│   │   ├── journey.ts
-│   │   ├── projects.ts
-│   │   ├── experience.ts
-│   │   ├── skills.ts
-│   │   └── education.ts
 │   ├── animations.ts       # Animation configurations
 │   └── utils.ts            # Utility functions
 ├── public/
 │   ├── images/            # Images
 │   └── resume.pdf         # Your resume
-└── styles/
-    └── animations.css     # Custom animations
+├── docs/                   # Documentation
+│   ├── CREDITS.md         # Third-party asset credits
+│   └── CHANGELOG.md       # Version history
+├── tailwind.config.ts     # Tailwind configuration
+└── package.json           # Dependencies
 ```
 
-## Tips for Success
+## Technologies Used
 
-### For Investment Banking Applications
-- Emphasize deal experience and financial modeling skills
-- Highlight transaction values and quantitative achievements
-- Keep design professional and clean (current theme is perfect)
-- Include relevant certifications (CFA, BMC, etc.)
+- **Next.js 15** - React framework
+- **React 19** - UI library
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **React Three Fiber** - 3D graphics
+- **@react-three/drei** - R3F helpers
+- **@react-three/postprocessing** - Visual effects
+- **Framer Motion** - Component animations
+- **GSAP** - Advanced animations
+- **Space Grotesk / Inter / JetBrains Mono** - Premium typography
 
-### SEO Optimization
-- Update metadata in `app/layout.tsx`
-- Add descriptive alt text to images
-- Use semantic HTML (already implemented)
+## Performance Considerations
 
-### Performance
-- Optimize images before adding them
-- Keep images under 200KB
-- Use WebP format when possible
+- 3D hero is lazy-loaded with dynamic import
+- Mobile devices get reduced particle counts and disabled postprocessing
+- Static fallback for `prefers-reduced-motion` users
+- Images should be optimized (WebP, <200KB)
 - Test with Lighthouse in Chrome DevTools
 
 ## Troubleshooting
@@ -256,39 +273,25 @@ finance-portfolio/
 - Check Node.js version (should be 18+)
 - Clear Next.js cache: `rm -rf .next`
 
+### 3D Not Rendering
+- Check browser WebGL support
+- Verify no console errors related to Three.js
+- Test in Chrome/Firefox with hardware acceleration enabled
+
 ### Styling Issues
 - Ensure Tailwind classes are correct
 - Check browser console for errors
-- Verify imports are correct
-
-### Animation Not Working
-- Check that components are client components ("use client")
-- Verify GSAP and Framer Motion are installed
-- Test in different browsers
-
-## Technologies Used
-
-- **Next.js 15** - React framework
-- **React 19** - UI library
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **Framer Motion** - Component animations
-- **GSAP** - Advanced scroll animations
-- **Geist Font** - Professional typography
+- Verify CSS variable names match
 
 ## License
 
 This project is open source and available for personal use.
 
-## Support
+## Documentation
 
-If you encounter issues:
-1. Check this README
-2. Review the code comments
-3. Check Next.js documentation: https://nextjs.org/docs
+- See `docs/CREDITS.md` for third-party asset attributions
+- See `docs/CHANGELOG.md` for version history
 
 ---
 
 **Built with passion for finance and technology**
-
-Good luck with your finance career! 🚀📊

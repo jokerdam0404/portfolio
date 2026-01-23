@@ -2,37 +2,328 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   PREMIUM THEME TOKEN SYSTEM
+
+   A sophisticated, token-based theming layer for a distinctive brand identity.
+   Edit these CSS variables to customize the entire site's appearance.
+   ========================================================================== */
+
 @layer base {
   :root {
-    --font-geist-sans: 'Geist Sans', system-ui, -apple-system, sans-serif;
-    --font-geist-mono: 'Geist Mono', 'SF Mono', 'Roboto Mono', monospace;
+    /* ─────────────────────────────────────────────────────────────────────
+       TYPOGRAPHY TOKENS
+       ───────────────────────────────────────────────────────────────────── */
+    --font-display: 'Space Grotesk', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', 'Roboto Mono', monospace;
+
+    /* ─────────────────────────────────────────────────────────────────────
+       LIGHT MODE COLORS
+       Premium finance aesthetic: clean whites, sophisticated blues, subtle depth
+       ───────────────────────────────────────────────────────────────────── */
+    --bg: 250 250 252;           /* Subtle off-white background */
+    --bg-deep: 240 242 247;       /* Deeper background for sections */
+    --surface: 255 255 255;       /* Card/panel surfaces */
+    --surface-elevated: 255 255 255; /* Elevated surfaces (modals, dropdowns) */
+    --surface-muted: 248 250 252; /* Muted surface for subtle elements */
+
+    --text: 15 23 42;             /* Primary text - deep navy */
+    --text-secondary: 71 85 105;  /* Secondary text */
+    --text-muted: 148 163 184;    /* Muted/placeholder text */
+    --text-inverse: 248 250 252;  /* Text on dark backgrounds */
+
+    --border: 226 232 240;        /* Default borders */
+    --border-subtle: 241 245 249; /* Subtle borders */
+    --border-strong: 203 213 225; /* Strong borders for emphasis */
+
+    /* Accent colors - premium blue palette */
+    --accent: 59 130 246;         /* Primary accent - vibrant blue */
+    --accent-hover: 37 99 235;    /* Accent hover state */
+    --accent-muted: 147 197 253;  /* Muted accent for backgrounds */
+    --accent-subtle: 219 234 254; /* Very subtle accent tint */
+
+    --accent2: 16 185 129;        /* Secondary accent - emerald for success/positive */
+    --accent2-hover: 5 150 105;
+    --accent2-muted: 167 243 208;
+
+    /* Semantic colors */
+    --success: 16 185 129;
+    --warning: 245 158 11;
+    --error: 239 68 68;
+
+    /* Effects */
+    --glow: 59 130 246;           /* Glow color for focus states */
+    --shadow-color: 15 23 42;     /* Shadow tint */
+
+    /* Gradients */
+    --gradient-start: 15 23 42;
+    --gradient-mid: 30 41 59;
+    --gradient-end: 51 65 85;
+
+    /* ─────────────────────────────────────────────────────────────────────
+       SPACING & SIZING TOKENS
+       Based on 4px grid for consistent rhythm
+       ───────────────────────────────────────────────────────────────────── */
+    --space-1: 0.25rem;   /* 4px */
+    --space-2: 0.5rem;    /* 8px */
+    --space-3: 0.75rem;   /* 12px */
+    --space-4: 1rem;      /* 16px */
+    --space-5: 1.25rem;   /* 20px */
+    --space-6: 1.5rem;    /* 24px */
+    --space-8: 2rem;      /* 32px */
+    --space-10: 2.5rem;   /* 40px */
+    --space-12: 3rem;     /* 48px */
+    --space-16: 4rem;     /* 64px */
+    --space-20: 5rem;     /* 80px */
+    --space-24: 6rem;     /* 96px */
+
+    /* ─────────────────────────────────────────────────────────────────────
+       BORDER RADIUS TOKENS
+       ───────────────────────────────────────────────────────────────────── */
+    --radius-sm: 0.375rem;  /* 6px - small elements */
+    --radius-md: 0.5rem;    /* 8px - default */
+    --radius-lg: 0.75rem;   /* 12px - cards */
+    --radius-xl: 1rem;      /* 16px - large cards */
+    --radius-2xl: 1.5rem;   /* 24px - hero elements */
+    --radius-full: 9999px;  /* Pills, avatars */
+
+    /* ─────────────────────────────────────────────────────────────────────
+       SHADOW TOKENS
+       Refined, subtle shadows for professional depth
+       ───────────────────────────────────────────────────────────────────── */
+    --shadow-xs: 0 1px 2px rgb(var(--shadow-color) / 0.04);
+    --shadow-sm: 0 1px 3px rgb(var(--shadow-color) / 0.06), 0 1px 2px rgb(var(--shadow-color) / 0.04);
+    --shadow-md: 0 4px 6px rgb(var(--shadow-color) / 0.05), 0 2px 4px rgb(var(--shadow-color) / 0.03);
+    --shadow-lg: 0 10px 15px rgb(var(--shadow-color) / 0.06), 0 4px 6px rgb(var(--shadow-color) / 0.03);
+    --shadow-xl: 0 20px 25px rgb(var(--shadow-color) / 0.08), 0 8px 10px rgb(var(--shadow-color) / 0.04);
+    --shadow-glow: 0 0 20px rgb(var(--glow) / 0.15);
+    --shadow-glow-lg: 0 0 40px rgb(var(--glow) / 0.2);
   }
 
-  /* Light mode (default) */
-  body {
-    @apply bg-primary-50 text-primary-900 font-sans antialiased;
+  /* ─────────────────────────────────────────────────────────────────────
+     DARK MODE COLORS
+     Sophisticated dark palette with luminous accents
+     ───────────────────────────────────────────────────────────────────── */
+  .dark {
+    --bg: 3 7 18;                 /* Deep dark background */
+    --bg-deep: 2 6 23;            /* Even deeper for variation */
+    --surface: 15 23 42;          /* Card surfaces */
+    --surface-elevated: 30 41 59; /* Elevated surfaces */
+    --surface-muted: 8 12 28;     /* Muted surface */
+
+    --text: 248 250 252;          /* Primary text - bright white */
+    --text-secondary: 203 213 225;
+    --text-muted: 100 116 139;
+    --text-inverse: 15 23 42;
+
+    --border: 51 65 85;
+    --border-subtle: 30 41 59;
+    --border-strong: 71 85 105;
+
+    --accent: 96 165 250;         /* Brighter blue for dark mode */
+    --accent-hover: 147 197 253;
+    --accent-muted: 30 58 138;
+    --accent-subtle: 23 37 84;
+
+    --accent2: 52 211 153;
+    --accent2-hover: 110 231 183;
+    --accent2-muted: 6 78 59;
+
+    --success: 52 211 153;
+    --warning: 251 191 36;
+    --error: 248 113 113;
+
+    --glow: 96 165 250;
+    --shadow-color: 0 0 0;
+
+    --gradient-start: 2 6 23;
+    --gradient-mid: 15 23 42;
+    --gradient-end: 30 41 59;
+
+    --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.2);
+    --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.3), 0 1px 2px rgb(0 0 0 / 0.2);
+    --shadow-md: 0 4px 6px rgb(0 0 0 / 0.3), 0 2px 4px rgb(0 0 0 / 0.2);
+    --shadow-lg: 0 10px 15px rgb(0 0 0 / 0.3), 0 4px 6px rgb(0 0 0 / 0.2);
+    --shadow-xl: 0 20px 25px rgb(0 0 0 / 0.4), 0 8px 10px rgb(0 0 0 / 0.2);
+    --shadow-glow: 0 0 30px rgb(var(--glow) / 0.25);
+    --shadow-glow-lg: 0 0 60px rgb(var(--glow) / 0.35);
   }
 
-  /* Dark mode */
-  .dark body {
-    @apply bg-primary-950 text-primary-50;
-  }
-
+  /* ─────────────────────────────────────────────────────────────────────
+     BASE ELEMENT STYLES
+     ───────────────────────────────────────────────────────────────────── */
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Dark mode section backgrounds */
-  .dark section {
-    @apply bg-primary-950;
+  body {
+    background-color: rgb(var(--bg));
+    color: rgb(var(--text));
+    font-family: var(--font-body);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    line-height: 1.6;
   }
 
-  .dark section.bg-white {
-    @apply bg-primary-900;
+  /* Typography hierarchy */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
   }
 
-  .dark section.bg-primary-50 {
-    @apply bg-primary-900;
+  h1 {
+    font-size: clamp(2.5rem, 5vw + 1rem, 5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  h2 {
+    font-size: clamp(1.875rem, 3vw + 0.5rem, 3rem);
+    letter-spacing: -0.025em;
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 2vw + 0.25rem, 1.5rem);
+  }
+
+  /* Numeric styles for finance data */
+  .tabular-nums {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  /* Code and monospace */
+  code, pre, kbd {
+    font-family: var(--font-mono);
+  }
+
+  /* Selection styling */
+  ::selection {
+    background-color: rgb(var(--accent) / 0.2);
+    color: rgb(var(--text));
+  }
+
+  /* Focus ring for accessibility */
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 2px;
+  }
+}
+
+/* ==========================================================================
+   COMPONENT STYLES & UTILITIES
+   ========================================================================== */
+
+@layer components {
+  /* Premium card style */
+  .card-premium {
+    background: rgb(var(--surface));
+    border: 1px solid rgb(var(--border));
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-premium:hover {
+    border-color: rgb(var(--border-strong));
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  /* Glass morphism with premium feel */
+  .glass {
+    background: rgb(var(--surface) / 0.6);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgb(var(--border) / 0.5);
+  }
+
+  .dark .glass {
+    background: rgb(var(--surface) / 0.4);
+    border: 1px solid rgb(var(--border) / 0.3);
+  }
+
+  /* Premium button base */
+  .btn-premium {
+    font-family: var(--font-body);
+    font-weight: 500;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-lg);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-premium:focus-visible {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Accent glow effect */
+  .glow-accent {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .glow-accent-lg {
+    box-shadow: var(--shadow-glow-lg);
+  }
+
+  /* Premium link style */
+  .link-premium {
+    color: rgb(var(--accent));
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s ease;
+  }
+
+  .link-premium::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, rgb(var(--accent) / 0.5), rgb(var(--accent)), rgb(var(--accent) / 0.5));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .link-premium:hover {
+    color: rgb(var(--accent-hover));
+  }
+
+  .link-premium:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* Badge premium */
+  .badge-premium {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: rgb(var(--accent-subtle));
+    color: rgb(var(--accent));
+    border: 1px solid rgb(var(--accent) / 0.2);
+    transition: all 0.2s ease;
+  }
+
+  .badge-premium:hover {
+    background: rgb(var(--accent-muted));
+    border-color: rgb(var(--accent) / 0.4);
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Section divider */
+  .divider-premium {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, rgb(var(--accent)), rgb(var(--accent2)));
+    border-radius: var(--radius-full);
+    margin: var(--space-6) auto;
   }
 }
 
@@ -41,38 +332,68 @@
     text-wrap: balance;
   }
 
-  /* Custom gradient background for hero - Light mode */
+  /* Background utilities using tokens */
+  .bg-theme {
+    background-color: rgb(var(--bg));
+  }
+
+  .bg-surface {
+    background-color: rgb(var(--surface));
+  }
+
+  .bg-surface-elevated {
+    background-color: rgb(var(--surface-elevated));
+  }
+
+  /* Text utilities using tokens */
+  .text-theme {
+    color: rgb(var(--text));
+  }
+
+  .text-secondary {
+    color: rgb(var(--text-secondary));
+  }
+
+  .text-muted {
+    color: rgb(var(--text-muted));
+  }
+
+  /* Border utilities using tokens */
+  .border-theme {
+    border-color: rgb(var(--border));
+  }
+
+  .border-subtle {
+    border-color: rgb(var(--border-subtle));
+  }
+
+  /* Premium gradient backgrounds */
   .gradient-bg {
     background: linear-gradient(
       135deg,
-      #0F172A 0%,
-      #1E293B 25%,
-      #334155 50%,
-      #1E293B 75%,
-      #0F172A 100%
+      rgb(var(--gradient-start)) 0%,
+      rgb(var(--gradient-mid)) 50%,
+      rgb(var(--gradient-end)) 100%
     );
-    background-size: 400% 400%;
   }
 
-  /* Dark mode gradient - deeper colors */
-  .dark .gradient-bg {
+  .gradient-hero {
     background: linear-gradient(
-      135deg,
-      #020617 0%,
-      #0F172A 25%,
-      #1E293B 50%,
-      #0F172A 75%,
-      #020617 100%
+      145deg,
+      rgb(var(--gradient-start)) 0%,
+      rgb(var(--gradient-mid)) 40%,
+      rgb(var(--gradient-end)) 70%,
+      rgb(var(--accent) / 0.3) 100%
     );
-    background-size: 400% 400%;
+    background-size: 200% 200%;
   }
 
   /* Animated gradient */
   .gradient-animated {
-    animation: gradient 15s ease infinite;
+    animation: gradient-shift 12s ease-in-out infinite;
   }
 
-  @keyframes gradient {
+  @keyframes gradient-shift {
     0%, 100% {
       background-position: 0% 50%;
     }
@@ -81,53 +402,151 @@
     }
   }
 
-  /* Glass morphism effect */
-  .glass {
-    @apply bg-white/10 backdrop-blur-lg border border-white/20;
+  /* Subtle noise texture overlay */
+  .noise-overlay {
+    position: relative;
   }
 
-  .dark .glass {
-    @apply bg-black/20 backdrop-blur-lg border border-white/10;
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.015;
+    pointer-events: none;
+    mix-blend-mode: overlay;
   }
 
-  /* Card hover effect */
+  .dark .noise-overlay::before {
+    opacity: 0.03;
+  }
+
+  /* Premium hover lift effect */
+  .hover-lift {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  /* Shine effect on hover */
+  .hover-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hover-shine::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 40%,
+      rgb(255 255 255 / 0.1) 50%,
+      transparent 60%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .hover-shine:hover::after {
+    transform: translateX(100%);
+  }
+
+  /* Border highlight effect */
+  .border-highlight {
+    position: relative;
+  }
+
+  .border-highlight::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      rgb(var(--accent) / 0.3),
+      transparent 50%,
+      rgb(var(--accent2) / 0.2)
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Focus ring styles */
+  .focus-ring {
+    outline: none;
+  }
+
+  .focus-ring:focus-visible {
+    box-shadow: 0 0 0 3px rgb(var(--accent) / 0.4);
+  }
+
+  /* Animated border gradient */
+  @keyframes border-rotate {
+    0% {
+      --border-angle: 0deg;
+    }
+    100% {
+      --border-angle: 360deg;
+    }
+  }
+
+  /* Section backgrounds */
+  section {
+    background-color: rgb(var(--bg));
+  }
+
+  section:nth-child(even) {
+    background-color: rgb(var(--bg-deep));
+  }
+
+  /* Card hover animations */
   .card-hover {
-    @apply transition-all duration-300 hover:scale-105 hover:shadow-2xl;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Dark mode card styles */
-  .dark .bg-white {
-    @apply bg-primary-800;
+  .card-hover:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: var(--shadow-xl);
   }
 
-  /* Text colors in dark mode */
-  .dark .text-primary-900 {
-    @apply text-primary-50;
+  /* Smooth scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
   }
 
-  .dark .text-primary-700 {
-    @apply text-primary-300;
+  ::-webkit-scrollbar-track {
+    background: rgb(var(--bg-deep));
   }
 
-  .dark .text-primary-600 {
-    @apply text-primary-400;
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--border-strong));
+    border-radius: var(--radius-full);
+    border: 2px solid rgb(var(--bg-deep));
   }
 
-  .dark .text-primary-500 {
-    @apply text-primary-400;
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--text-muted));
   }
 
-  /* Border colors in dark mode */
-  .dark .border-primary-200 {
-    @apply border-primary-700;
-  }
-
-  .dark .border-primary-300 {
-    @apply border-primary-600;
-  }
-
-  /* Hover states in dark mode */
-  .dark .hover\:bg-primary-100:hover {
-    @apply bg-primary-800;
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
