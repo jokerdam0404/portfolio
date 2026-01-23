@@ -1,25 +1,30 @@
 # Finance-Focused Personal Portfolio Website
 
-A cutting-edge, highly interactive personal portfolio website showcasing your finance journey, built with Next.js 15, TypeScript, Tailwind CSS, React Three Fiber, and Framer Motion.
+A cutting-edge, highly interactive personal portfolio website showcasing your finance journey, built with Next.js 15, TypeScript, Tailwind CSS, and Framer Motion.
 
 ## Features
 
 - **Modern Tech Stack**: Next.js 15, React 19, TypeScript
-- **Cinematic 3D Hero**: Scroll-driven journey through stairs → black hole → trading floor
+- **Cinematic Video Hero**: Scroll-driven photoreal video experience (stairs → black hole → trading floor)
 - **Premium Typography**: Space Grotesk (display) + Inter (body) + JetBrains Mono (numeric)
 - **Token-Based Theming**: CSS variables for easy customization of colors, spacing, and effects
-- **Stunning Animations**: React Three Fiber, Framer Motion & GSAP for professional effects
+- **Stunning Animations**: Framer Motion & GSAP for professional effects
 - **Finance-Optimized Design**: Professional color scheme suitable for IB/PE/HF applications
 - **Fully Responsive**: Mobile-first design with optimizations for all devices
+- **Hardware-Accelerated Video**: Smooth 60fps scroll-scrubbing via native video decoding
 - **Easy Content Management**: All content in separate data files for easy updates
 - **SEO Optimized**: Built-in metadata and Open Graph tags
 - **Accessibility**: Reduced motion support, keyboard navigation, proper focus states
 
+## Live Demo
+
+🌐 [View Live Site](https://finance-portfolio-ruby.vercel.app/)
+
 ## Sections
 
-1. **Hero** - Cinematic 3D scroll-driven experience with three scenes:
+1. **Hero** - Cinematic video scroll-driven experience with three scenes:
    - Scene A: Walking up stairs (ascent/ambition)
-   - Scene B: Black hole warp tunnel (transition/transformation)
+   - Scene B: Black hole warp (transition/transformation)
    - Scene C: Trading floor emergence (arrival/success)
 2. **About** - Professional introduction with skills overview
 3. **Finance Journey** - Interactive timeline of your learning path
@@ -38,8 +43,9 @@ A cutting-edge, highly interactive personal portfolio website showcasing your fi
 
 ### Installation
 
-1. Navigate to the project directory:
+1. Clone and navigate to the project:
 ```bash
+git clone <your-repo-url>
 cd finance-portfolio
 ```
 
@@ -48,41 +54,71 @@ cd finance-portfolio
 npm install
 ```
 
-3. Run the development server:
+3. **Important**: Download video assets (see [docs/ASSET_CHECKLIST.md](docs/ASSET_CHECKLIST.md))
+   - Place video files in `public/cinematic/`
+   - The hero uses placeholder files by default
+
+4. Run the development server:
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Customization Guide
 
+### Cinematic Video Hero
+
+The hero uses scroll-scrubbed videos for a photoreal cinematic experience. See [docs/HERO_CINEMATIC.md](docs/HERO_CINEMATIC.md) for detailed customization.
+
+#### Quick Overview
+
+```
+components/hero/
+├── CinematicVideoHero.tsx   # Main scroll-scrubbed video component
+├── HeroOverlay.tsx          # Text overlays (name, CTAs, H-1B1 badge)
+└── index.ts                 # Exports
+
+public/cinematic/
+├── stairs.mp4               # Scene A: Walking up stairs
+├── stairs-poster.jpg        # Poster for Scene A
+├── blackhole.mp4            # Scene B: Wormhole/black hole
+├── blackhole-poster.jpg     # Poster for Scene B
+├── trading.mp4              # Scene C: Trading floor
+└── trading-poster.jpg       # Poster for Scene C
+```
+
+#### Replacing Videos
+
+1. Download new video from Pexels/Pixabay/Mixkit (see [docs/ASSET_CHECKLIST.md](docs/ASSET_CHECKLIST.md))
+2. Re-encode for smooth scrubbing:
+   ```bash
+   ffmpeg -i input.mp4 -c:v libx264 -preset slow -crf 22 \
+     -g 15 -keyint_min 15 -sc_threshold 0 -an \
+     -vf "scale=1920:1080" public/cinematic/stairs.mp4
+   ```
+3. Generate poster:
+   ```bash
+   ffmpeg -i public/cinematic/stairs.mp4 -vframes 1 public/cinematic/stairs-poster.jpg
+   ```
+
 ### Theme Tokens (Colors, Typography, Spacing)
 
-The theme system uses CSS variables defined in `app/globals.css`. Edit these to customize the entire site:
+The theme system uses CSS variables defined in `app/globals.css`:
 
 ```css
 :root {
   /* Background colors */
-  --bg: 250 250 252;           /* Main background */
-  --bg-deep: 240 242 247;       /* Alternating section background */
-  --surface: 255 255 255;       /* Card surfaces */
+  --bg: 250 250 252;
+  --surface: 255 255 255;
 
   /* Text colors */
-  --text: 15 23 42;             /* Primary text */
-  --text-secondary: 71 85 105;  /* Secondary text */
-  --text-muted: 148 163 184;    /* Muted text */
+  --text: 15 23 42;
+  --text-secondary: 71 85 105;
 
   /* Accent colors */
-  --accent: 59 130 246;         /* Primary accent (blue) */
-  --accent2: 16 185 129;        /* Secondary accent (emerald) */
-
-  /* Effects */
-  --glow: 59 130 246;           /* Glow color for focus states */
-}
-
-.dark {
-  /* Dark mode overrides... */
+  --accent: 59 130 246;         /* Blue */
+  --accent2: 16 185 129;        /* Emerald */
 }
 ```
 
@@ -90,87 +126,13 @@ The theme system uses CSS variables defined in `app/globals.css`. Edit these to 
 
 Fonts are loaded in `app/layout.tsx` using `next/font/google`:
 
-- **Display Font** (Space Grotesk): Used for headings, hero text
-- **Body Font** (Inter): Used for body text, paragraphs
-- **Mono Font** (JetBrains Mono): Used for code, numbers
-
-To change fonts:
-1. Edit `app/layout.tsx` to import different fonts from `next/font/google`
-2. Update CSS variables `--font-display`, `--font-body`, `--font-mono` in `globals.css`
-
-### Hero Timeline & 3D Scene
-
-The cinematic hero is in `components/hero/`:
-
-```
-components/hero/
-├── CinematicHero.tsx    # Main wrapper with scroll logic
-├── CinematicCanvas.tsx  # 3D canvas with all three scenes
-├── HeroOverlay.tsx      # Text content overlay
-└── index.ts             # Exports
-```
-
-**To adjust scroll timing:**
-Edit `CinematicHero.tsx`:
-- Scene duration is based on 3x viewport height of scrolling
-- Modify `heroHeight` calculation to change total scroll length
-
-**To adjust camera movement:**
-Edit `CinematicCanvas.tsx` in the `CinematicScene` component:
-- `pos1`, `pos2`, `pos3`: Camera positions for each scene
-- `lookAt1`, `lookAt2`, `lookAt3`: Camera look-at targets
-- `baseFov`, `tunnelFov`: Field of view values
-
-**To adjust scene content:**
-Each scene is a separate component in `CinematicCanvas.tsx`:
-- `StairsScene`: Stairs geometry, walking figure, particles
-- `BlackHoleScene`: Tunnel particles, accretion disk, light beams
-- `TradingFloorScene`: Monitor walls, desks, ticker tape
-
-### Postprocessing Effects
-
-Effects are configured in `CinematicCanvas.tsx`:
-```tsx
-<EffectComposer>
-  <Bloom intensity={0.5} luminanceThreshold={0.6} />
-  <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={3} />
-  <Vignette offset={0.1} darkness={0.5} />
-  <Noise opacity={0.015} />
-</EffectComposer>
-```
-
-Adjust values to change the visual feel. Remove effects for better performance on low-end devices.
-
-### Replacing 3D Assets
-
-**To use custom 3D models:**
-
-1. Add GLTF/GLB files to `public/models/`
-2. Use `@react-three/drei`'s `useGLTF` hook:
-```tsx
-import { useGLTF } from '@react-three/drei';
-
-function CustomModel() {
-  const { scene } = useGLTF('/models/your-model.glb');
-  return <primitive object={scene} />;
-}
-```
-
-**To optimize 3D assets:**
-```bash
-# Install gltf-transform CLI
-npm install -g @gltf-transform/cli
-
-# Compress with Draco
-gltf-transform draco input.glb output.glb
-
-# Or with Meshopt
-gltf-transform meshopt input.glb output.glb
-```
+- **Display Font** (Space Grotesk): Headings, hero text
+- **Body Font** (Inter): Body text, paragraphs
+- **Mono Font** (JetBrains Mono): Code, numbers
 
 ### Content Data Files
 
-All content is in `lib/data/` - edit the TypeScript objects:
+All content is in `lib/data/`:
 
 - `journey.ts` - Finance journey milestones
 - `projects.ts` - Portfolio projects
@@ -178,14 +140,12 @@ All content is in `lib/data/` - edit the TypeScript objects:
 - `skills.ts` - Skills by category
 - `education.ts` - Education and certifications
 
-### Contact Information
+### H-1B1 Badge
 
-Edit `components/sections/Contact.tsx`:
-- Line 32: Update email
-- Line 47: Update LinkedIn URL
-- Line 54: Update GitHub URL
-
-The H-1B1 badge in the hero and contact sections links to the DOL H-1B1 information page.
+The H-1B1 badge in the hero links to the official DOL page:
+```
+https://www.dol.gov/agencies/whd/immigration/h1b1
+```
 
 ## Building for Production
 
@@ -196,7 +156,7 @@ npm start
 
 ## Deployment
 
-### Deploying to Vercel (Recommended)
+### Vercel (Recommended)
 
 1. Push your code to GitHub
 2. Visit [vercel.com](https://vercel.com)
@@ -204,45 +164,35 @@ npm start
 4. Vercel will auto-detect Next.js and deploy
 5. Your site will be live at `https://your-project.vercel.app`
 
+**Note**: Make sure your Vercel project is connected to the correct GitHub repo and branch.
+
 ## Project Structure
 
 ```
 finance-portfolio/
-├── app/                      # Next.js app directory
+├── app/
 │   ├── layout.tsx           # Root layout with fonts
 │   ├── page.tsx             # Home page
 │   └── globals.css          # Theme tokens & global styles
 ├── components/
-│   ├── hero/                # Cinematic 3D hero
-│   │   ├── CinematicHero.tsx
-│   │   ├── CinematicCanvas.tsx
+│   ├── hero/                # Video hero system
+│   │   ├── CinematicVideoHero.tsx
 │   │   └── HeroOverlay.tsx
 │   ├── sections/            # Page sections
-│   │   ├── Hero.tsx         # Hero wrapper
-│   │   ├── About.tsx
-│   │   ├── FinanceJourney.tsx
-│   │   ├── Projects.tsx
-│   │   ├── Experience.tsx
-│   │   ├── Skills.tsx
-│   │   ├── Education.tsx
-│   │   └── Contact.tsx
-│   ├── three/               # Legacy 3D components
 │   ├── ui/                  # Reusable UI components
 │   └── animations/          # Animation wrappers
-├── hooks/                   # Custom React hooks
-│   └── usePrefersReducedMotion.ts
-├── lib/
-│   ├── data/               # Content data files
-│   ├── animations.ts       # Animation configurations
-│   └── utils.ts            # Utility functions
 ├── public/
-│   ├── images/            # Images
-│   └── resume.pdf         # Your resume
-├── docs/                   # Documentation
-│   ├── CREDITS.md         # Third-party asset credits
-│   └── CHANGELOG.md       # Version history
-├── tailwind.config.ts     # Tailwind configuration
-└── package.json           # Dependencies
+│   ├── cinematic/           # Hero video assets
+│   ├── images/              # Static images
+│   └── resume.pdf           # Resume file
+├── docs/
+│   ├── ASSET_CHECKLIST.md   # Video asset requirements
+│   ├── HERO_CINEMATIC.md    # Hero technical docs
+│   ├── CREDITS.md           # Third-party attributions
+│   └── CHANGELOG.md         # Version history
+├── lib/data/                # Content data files
+├── hooks/                   # Custom React hooks
+└── tailwind.config.ts       # Tailwind configuration
 ```
 
 ## Technologies Used
@@ -251,46 +201,53 @@ finance-portfolio/
 - **React 19** - UI library
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Styling
-- **React Three Fiber** - 3D graphics
-- **@react-three/drei** - R3F helpers
-- **@react-three/postprocessing** - Visual effects
 - **Framer Motion** - Component animations
-- **GSAP** - Advanced animations
+- **GSAP** - Scroll animations
 - **Space Grotesk / Inter / JetBrains Mono** - Premium typography
 
-## Performance Considerations
+## Performance
 
-- 3D hero is lazy-loaded with dynamic import
-- Mobile devices get reduced particle counts and disabled postprocessing
-- Static fallback for `prefers-reduced-motion` users
-- Images should be optimized (WebP, <200KB)
-- Test with Lighthouse in Chrome DevTools
+The video-based hero provides excellent performance:
+
+- **Hardware-accelerated video decoding** - Uses GPU, not CPU
+- **RAF-based scroll handling** - No React state updates per frame
+- **Lazy loading** - Hero loads dynamically
+- **Reduced motion support** - Static fallback for accessibility
+- **~12-23 MB video assets** - Reasonable for high-quality cinematics
+
+Target metrics:
+- LCP < 2.5s
+- FID < 100ms
+- CLS < 0.1
+- 60fps during scroll
 
 ## Troubleshooting
 
-### Build Errors
-- Run `npm install` to ensure all dependencies are installed
-- Check Node.js version (should be 18+)
-- Clear Next.js cache: `rm -rf .next`
+### Videos not loading
+- Check files exist in `public/cinematic/`
+- Verify file names match exactly (case-sensitive)
+- Check browser console for 404 errors
 
-### 3D Not Rendering
-- Check browser WebGL support
-- Verify no console errors related to Three.js
-- Test in Chrome/Firefox with hardware acceleration enabled
+### Scroll feels janky
+- Re-encode videos with more keyframes (`-g 15`)
+- Reduce video file size
+- Test on different browsers
 
-### Styling Issues
-- Ensure Tailwind classes are correct
-- Check browser console for errors
-- Verify CSS variable names match
+### Build errors
+- Run `npm install`
+- Check Node.js version (18+)
+- Clear cache: `rm -rf .next`
+
+## Documentation
+
+- [docs/HERO_CINEMATIC.md](docs/HERO_CINEMATIC.md) - Hero implementation details
+- [docs/ASSET_CHECKLIST.md](docs/ASSET_CHECKLIST.md) - Video asset requirements
+- [docs/CREDITS.md](docs/CREDITS.md) - Third-party attributions
+- [docs/CHANGELOG.md](docs/CHANGELOG.md) - Version history
 
 ## License
 
 This project is open source and available for personal use.
-
-## Documentation
-
-- See `docs/CREDITS.md` for third-party asset attributions
-- See `docs/CHANGELOG.md` for version history
 
 ---
 

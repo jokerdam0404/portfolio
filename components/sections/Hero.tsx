@@ -1,23 +1,19 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 /**
- * Lazy-load the cinematic hero to reduce initial bundle size.
- * This component contains the full 3D experience with Three.js.
+ * Lazy-load the cinematic video hero to reduce initial bundle size.
+ * This component uses scroll-scrubbed videos for photoreal cinematics.
  */
-const CinematicHero = dynamic(
-  () => import("@/components/hero/CinematicHero"),
+const CinematicVideoHero = dynamic(
+  () => import("@/components/hero/CinematicVideoHero"),
   {
     ssr: false,
     loading: () => (
-      <div className="min-h-screen bg-gradient-to-b from-primary-950 via-primary-900 to-primary-950 flex items-center justify-center">
+      <div className="min-h-screen bg-primary-950 flex items-center justify-center">
         <div className="relative">
-          <div className="w-24 h-24 rounded-full border-2 border-accent-500/30 border-t-accent-500 animate-spin" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-16 h-16 rounded-full bg-accent-500/20 animate-pulse" />
-          </div>
+          <div className="w-16 h-16 rounded-full border-2 border-accent-500/30 border-t-accent-500 animate-spin" />
         </div>
       </div>
     ),
@@ -25,20 +21,18 @@ const CinematicHero = dynamic(
 );
 
 /**
- * Hero section wrapper that handles the cinematic 3D experience.
+ * Hero section wrapper for the cinematic video experience.
  *
  * Features:
- * - Scroll-driven cinematic journey through three scenes
+ * - Scroll-driven video scrubbing through three scenes
  * - Stairs → Black hole → Trading floor narrative
  * - Skip intro button with keyboard support (ESC)
- * - Reduced motion fallback
- * - Mobile optimization
+ * - Replay functionality
+ * - Reduced motion support with static fallback
+ * - Hardware-accelerated video playback
  */
 export default function Hero() {
-  const prefersReducedMotion = usePrefersReducedMotion();
-
   const handleSkipIntro = () => {
-    // Scroll to the about section when intro is skipped
     const aboutSection = document.getElementById("about");
     if (aboutSection) {
       aboutSection.scrollIntoView({ behavior: "smooth" });
@@ -47,7 +41,7 @@ export default function Hero() {
 
   return (
     <section id="hero" className="relative">
-      <CinematicHero onSkipIntro={handleSkipIntro} />
+      <CinematicVideoHero onSkipIntro={handleSkipIntro} />
     </section>
   );
 }

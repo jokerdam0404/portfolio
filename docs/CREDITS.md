@@ -32,12 +32,6 @@ All fonts are served via Google Fonts / `next/font/google`:
 - **Tailwind CSS** - MIT License - https://tailwindcss.com
 - **next-themes** - MIT License - https://github.com/pacocoursey/next-themes
 
-### 3D Graphics
-- **Three.js** - MIT License - https://threejs.org
-- **React Three Fiber** - MIT License - https://docs.pmnd.rs/react-three-fiber
-- **@react-three/drei** - MIT License - https://github.com/pmndrs/drei
-- **@react-three/postprocessing** - MIT License - https://github.com/pmndrs/react-postprocessing
-
 ### Animation
 - **Framer Motion** - MIT License - https://www.framer.com/motion
 - **GSAP (GreenSock)** - Standard License (free for non-commercial) - https://greensock.com
@@ -46,15 +40,30 @@ All fonts are served via Google Fonts / `next/font/google`:
 - **clsx** - MIT License - https://github.com/lukeed/clsx
 - **tailwind-merge** - MIT License - https://github.com/dcastil/tailwind-merge
 
-## 3D Assets
+## Video Assets
 
-The 3D hero scene uses procedurally generated geometry (no external 3D model files).
+The cinematic hero uses stock video clips. See `docs/ASSET_CHECKLIST.md` for sourcing details.
 
-### Environment
-- Built-in "night" environment preset from @react-three/drei
-- If you add custom HDRIs, consider using:
-  - **Poly Haven** - CC0 (Public Domain) - https://polyhaven.com
-  - Attribution appreciated but not required
+### Recommended Sources (Free, No Attribution Required)
+
+- **Pexels** - https://www.pexels.com/videos/
+  - License: Pexels License (free for commercial use, no attribution required)
+
+- **Pixabay** - https://pixabay.com/videos/
+  - License: Pixabay License (free for commercial use, no attribution required)
+
+- **Mixkit** - https://mixkit.co/free-stock-video/
+  - License: Mixkit License (free for commercial use, no attribution required)
+
+- **Coverr** - https://coverr.co/
+  - License: Coverr License (free for commercial use)
+
+### Asset Usage Notes
+
+When downloading videos, verify:
+1. License allows commercial/portfolio use
+2. No attribution is required (or provide attribution if required)
+3. Modifications are allowed (cropping, color grading)
 
 ## Icons
 
@@ -62,7 +71,7 @@ SVG icons are inline custom implementations, not from external icon libraries.
 
 ## Design Inspiration
 
-- Awwwards Three.js Gallery - https://www.awwwards.com/websites/three-js/
+- Awwwards - https://www.awwwards.com/
 - Active Theory Studio - https://activetheory.net
 - Various finance/fintech portfolio sites
 
@@ -73,13 +82,6 @@ The color palette is original, inspired by professional finance aesthetics:
 - Electric blue accents (#3B82F6 series)
 - Emerald success indicators (#10B981 series)
 
-## Code References
-
-Some patterns and approaches were inspired by:
-- React Three Fiber documentation examples
-- Drei component source code
-- Next.js App Router examples
-
 ---
 
 ## Adding Your Own Assets
@@ -87,15 +89,14 @@ Some patterns and approaches were inspired by:
 When adding third-party assets:
 
 1. Verify the license allows your intended use
-2. Add attribution to this file
+2. Add attribution to this file if required
 3. For CC0/public domain assets, attribution is appreciated but not required
 4. For CC-BY assets, attribution is required
 5. Never use assets without proper licensing
 
 ### Recommended Free Asset Sources
 
-- **3D Models**: Sketchfab (check individual licenses), Poly Haven (CC0)
-- **HDRIs**: Poly Haven (CC0)
-- **Textures**: Poly Haven (CC0), ambientCG (CC0)
+- **Stock Videos**: Pexels, Pixabay, Mixkit, Coverr
+- **Stock Photos**: Unsplash, Pexels, Pixabay
 - **Fonts**: Google Fonts (various open licenses)
 - **Icons**: Heroicons (MIT), Lucide (ISC)
