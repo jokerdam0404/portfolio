@@ -1,8 +1,11 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, lazy, Suspense } from 'react';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import { TrendingUp, BarChart3, Target, Briefcase } from 'lucide-react';
+
+// Lazy load 3D component for performance
+const FloatingGeometry = lazy(() => import('@/components/3d/FloatingGeometry'));
 
 function AnimatedCounter({ value, duration = 2 }: { value: string; duration?: number }) {
     const [count, setCount] = useState(0);
@@ -70,12 +73,40 @@ const metrics = [
     },
 ];
 
+// 3D scene configuration for metrics section
+const metrics3DConfig = {
+    showOctahedron: true,
+    showTorus: true,
+    showIcosahedron: false,
+    showWireframeCube: true,
+    showParticles: true,
+    particleCount: 20,
+    positions: {
+        octahedron: [-4, 2, -2] as [number, number, number],
+        torus: [4, -1.5, -1] as [number, number, number],
+        wireframeCube: [3, 2, -3] as [number, number, number],
+    },
+    scales: {
+        octahedron: 0.4,
+        torus: 0.35,
+        wireframeCube: 0.6,
+    },
+    speed: 0.7,
+};
+
 export default function MetricsGrid() {
     const ref = useRef<HTMLDivElement>(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
 
     return (
-        <section className="relative py-24 bg-[#0a0a0a]">
+        <section className="relative py-24 bg-[#0a0a0a] overflow-hidden">
+            {/* 3D Floating Geometry Background */}
+            <div className="absolute inset-0 pointer-events-none opacity-60">
+                <Suspense fallback={null}>
+                    <FloatingGeometry config={metrics3DConfig} />
+                </Suspense>
+            </div>
+
             {/* Subtle gradient accent */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] pointer-events-none" />
 

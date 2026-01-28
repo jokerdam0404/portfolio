@@ -1,10 +1,14 @@
 "use client";
 
+import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Headshot } from "@/components/ui/headshot";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
+
+// Lazy load 3D geometric frame for performance
+const GeometricFrame = lazy(() => import('@/components/3d/GeometricFrame'));
 
 export default function About() {
   const interests = [
@@ -38,10 +42,22 @@ export default function About() {
         </ScrollReveal>
 
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left: Headshot with premium frame */}
+          {/* Left: Headshot with premium frame and 3D elements */}
           <ScrollReveal delay={0.2}>
             <div className="relative flex justify-center lg:justify-start">
               <div className="relative group">
+                {/* 3D Geometric Frame Background */}
+                <div className="absolute -inset-16 pointer-events-none">
+                  <Suspense fallback={null}>
+                    <GeometricFrame
+                      showCorners={true}
+                      showRing={true}
+                      showOrbitingSpheres={true}
+                      showAccentDots={true}
+                    />
+                  </Suspense>
+                </div>
+
                 {/* Premium animated border */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-gold/50 via-gold/10 to-gold/50 rounded-2xl blur-sm group-hover:blur-md transition-all duration-500" />
 

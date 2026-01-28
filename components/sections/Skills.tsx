@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import { skills, skillCategories, Skill } from "@/lib/data/skills";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
+
+// Lazy load 3D background for performance
+const InteractiveBackground = lazy(() => import('@/components/3d/InteractiveBackground'));
 
 function SkillBar({ skill }: { skill: Skill }) {
   return (
@@ -37,7 +40,19 @@ export default function Skills() {
   );
 
   return (
-    <section id="skills" className="relative py-24 bg-[#050505]">
+    <section id="skills" className="relative py-24 bg-[#050505] overflow-hidden">
+      {/* Interactive 3D Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <Suspense fallback={null}>
+          <InteractiveBackground
+            particleCount={60}
+            showGrid={true}
+            showRings={true}
+            intensity="low"
+          />
+        </Suspense>
+      </div>
+
       {/* Background decoration */}
       <div className="absolute top-1/2 right-0 w-72 h-72 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />
 
