@@ -21,13 +21,17 @@ function TimelineCard({ milestone, index }: { milestone: JourneyMilestone; index
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <ScrollReveal delay={index * 0.1}>
+    <ScrollReveal delay={index * 0.08}>
       <motion.div
         className="relative"
-        initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+        initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60 }}
         whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{
+          duration: 0.6,
+          delay: index * 0.1,
+          ease: [0.43, 0.13, 0.23, 0.96]
+        }}
       >
         <div className={`flex items-center gap-4 ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
           {/* Timeline Dot */}
@@ -37,12 +41,12 @@ function TimelineCard({ milestone, index }: { milestone: JourneyMilestone; index
 
           {/* Card */}
           <motion.div
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2 }}
+            whileHover={{ scale: 1.02, y: -4 }}
+            transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
             className="flex-1"
           >
             <Card
-              className="cursor-pointer hover:shadow-lg transition-shadow"
+              className="cursor-pointer hover:shadow-2xl transition-all duration-500 border-white/5 hover:border-gold/20 bg-white/[0.02] hover:bg-white/[0.04]"
               onClick={() => setIsExpanded(!isExpanded)}
             >
               <CardHeader>
@@ -127,26 +131,31 @@ function TimelineCard({ milestone, index }: { milestone: JourneyMilestone; index
 
 export default function FinanceJourney() {
   return (
-    <section id="journey" className="py-20 px-6 bg-primary-50">
-      <div className="max-w-4xl mx-auto">
+    <section id="journey" className="relative py-24 bg-[#0a0a0a]">
+      {/* Subtle top divider gradient */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+
+      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-12">
         <ScrollReveal>
-          <h2 className="text-4xl md:text-5xl font-bold text-primary-900 mb-4 text-center">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="w-8 h-px bg-gold" />
+            <span className="text-gold font-mono text-sm tracking-widest uppercase">
+              Evolution
+            </span>
+            <div className="w-8 h-px bg-gold" />
+          </div>
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-16 text-center">
             My Finance Journey
           </h2>
-          <div className="w-20 h-1 bg-accent-500 mx-auto mb-6" />
-          <p className="text-center text-primary-600 mb-16 max-w-2xl mx-auto">
-            A step-by-step chronicle of my learning path in finance, from foundational
-            courses to advanced certifications and hands-on projects.
-          </p>
         </ScrollReveal>
 
         {/* Timeline */}
         <div className="relative">
           {/* Timeline Line */}
-          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-primary-200" />
+          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-white/5" />
 
           {/* Timeline Items */}
-          <div className="space-y-8">
+          <div className="space-y-12">
             {journeyData.map((milestone, index) => (
               <TimelineCard
                 key={milestone.id}
@@ -158,5 +167,6 @@ export default function FinanceJourney() {
         </div>
       </div>
     </section>
+
   );
 }

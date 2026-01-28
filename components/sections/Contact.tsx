@@ -36,156 +36,141 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="py-20 px-6 bg-gradient-to-br from-primary-900 to-primary-800 text-white">
-      <div className="max-w-6xl mx-auto">
+    <section id="contact" className="relative py-24 bg-[#050505] overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-gold/5 via-transparent to-transparent pointer-events-none" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
         <ScrollReveal>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="w-8 h-px bg-gold" />
+            <span className="text-gold font-mono text-sm tracking-widest uppercase">
+              Connection
+            </span>
+            <div className="w-8 h-px bg-gold" />
+          </div>
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-6 text-center">
             Get In Touch
           </h2>
-          <div className="w-20 h-1 bg-accent-500 mx-auto mb-6" />
-          <p className="text-center text-white/80 mb-12 max-w-2xl mx-auto text-lg">
-            I&apos;m seeking opportunities in equity research, quantitative finance,
-            and investment banking. Let&apos;s connect!
+          <p className="text-center text-white/50 mb-16 max-w-2xl mx-auto text-lg font-light">
+            Seeking opportunities in equity research, quantitative finance,
+            and investment banking. Let&apos;s build something exceptional.
           </p>
         </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left: Contact Form */}
           <ScrollReveal delay={0.2}>
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/10">
-              <h3 className="text-xl font-semibold mb-6 text-center md:text-left">
-                Send a Message
-              </h3>
-              <ContactForm />
+            <div className="relative group">
+              {/* Premium form glow */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-gold/20 via-transparent to-gold/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
+
+              <div className="relative bg-white/[0.02] border border-white/10 rounded-3xl p-8 md:p-10 backdrop-blur-3xl shadow-2xl">
+                <h3 className="text-xl font-display font-bold text-white mb-8">
+                  Direct Message
+                </h3>
+                <ContactForm />
+              </div>
             </div>
           </ScrollReveal>
 
           {/* Right: Contact Info */}
           <ScrollReveal delay={0.3}>
-            <div className="space-y-8">
-              {/* Direct Contact */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/10">
-                <h3 className="text-xl font-semibold mb-6">Direct Contact</h3>
-
-                <div className="space-y-4">
-                  <motion.a
-                    href="mailto:chaganti.ac@northeastern.edu"
-                    className="flex items-center gap-3 text-white/80 hover:text-white transition-colors group"
-                    whileHover={{ x: 4 }}
-                  >
-                    <div className="p-2 bg-white/10 rounded-lg group-hover:bg-accent-500/20 transition-colors">
+            <div className="space-y-10">
+              {/* Direct Contact Cards */}
+              <div className="grid sm:grid-cols-2 gap-6">
+                {[
+                  {
+                    label: "Email",
+                    value: "chaganti.ac@northeastern.edu",
+                    href: "mailto:chaganti.ac@northeastern.edu",
+                    icon: (
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
-                    </div>
-                    <span>chaganti.ac@northeastern.edu</span>
-                  </motion.a>
-
-                  <motion.a
-                    href="tel:+15175283322"
-                    className="flex items-center gap-3 text-white/80 hover:text-white transition-colors group"
-                    whileHover={{ x: 4 }}
-                  >
-                    <div className="p-2 bg-white/10 rounded-lg group-hover:bg-accent-500/20 transition-colors">
+                    )
+                  },
+                  {
+                    label: "Phone",
+                    value: "(517) 528-3322",
+                    href: "tel:+15175283322",
+                    icon: (
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                       </svg>
-                    </div>
-                    <span>(517) 528-3322</span>
-                  </motion.a>
-
-                  <motion.div
-                    className="flex items-center gap-3 text-white/80"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    )
+                  }
+                ].map((item) => (
+                  <motion.a
+                    key={item.label}
+                    href={item.href}
+                    whileHover={{ y: -4 }}
+                    className="p-6 bg-white/[0.02] border border-white/10 rounded-2xl hover:bg-gold/5 hover:border-gold/30 transition-all group"
                   >
-                    <div className="p-2 bg-white/10 rounded-lg">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
+                    <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center text-gold mb-4 group-hover:scale-110 transition-transform">
+                      {item.icon}
                     </div>
-                    <span>Boston, MA / East Lansing, MI</span>
-                  </motion.div>
-                </div>
+                    <div className="text-[10px] font-mono text-white/30 uppercase tracking-widest mb-1">{item.label}</div>
+                    <div className="text-sm text-white/80 font-medium truncate">{item.value}</div>
+                  </motion.a>
+                ))}
               </div>
 
-              {/* Social Links */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/10">
-                <h3 className="text-xl font-semibold mb-6">Connect</h3>
-                <div className="flex gap-4">
+              {/* Socials & Resume */}
+              <div className="p-8 bg-white/[0.02] border border-white/10 rounded-3xl">
+                <h3 className="text-sm font-mono text-gold uppercase tracking-[0.2em] mb-8">Professional Profiles</h3>
+
+                <div className="flex flex-wrap gap-4 mb-10">
                   {socialLinks.map((link) => (
                     <motion.a
                       key={link.name}
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-3 bg-white/10 rounded-full hover:bg-accent-500/20 transition-colors"
-                      whileHover={{ scale: 1.1, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      aria-label={link.name}
+                      className="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-gold/40 transition-all group"
+                      whileHover={{ scale: 1.02 }}
                     >
-                      {link.icon}
+                      <span className="text-white/60 group-hover:text-gold transition-colors">{link.icon}</span>
+                      <span className="text-sm font-medium text-white/80">{link.name}</span>
                     </motion.a>
                   ))}
                 </div>
 
-                {/* Resume Download */}
                 <a
                   href="/resume.pdf"
                   download
-                  className="mt-6 w-full inline-flex items-center justify-center rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 h-11 px-6 bg-accent-500 hover:bg-accent-600 text-white"
+                  className="w-full inline-flex items-center justify-center gap-3 py-4 bg-gold text-[#050505] font-bold rounded-xl hover:bg-[#E5C04B] transition-all duration-300 shadow-[0_0_30px_rgba(212,175,55,0.2)] hover:shadow-[0_0_40px_rgba(212,175,55,0.4)] hover:scale-[1.01]"
                 >
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  Download Resume
+                  Download Full Resume
                 </a>
+              </div>
+
+              {/* Additional Eligibility Note */}
+              <div className="flex items-center gap-4 p-5 bg-gold/5 border border-gold/10 rounded-2xl">
+                <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <p className="text-sm text-gold/80">
+                  <span className="font-bold">H-1B1 Visa Holder:</span> Singapore citizen with expedited authorization for US employment.
+                </p>
               </div>
             </div>
           </ScrollReveal>
         </div>
 
         {/* Footer */}
-        <ScrollReveal delay={0.4}>
-          <div className="mt-16 pt-8 border-t border-white/20 text-center">
-            <p className="text-white/60 text-sm">
-              © {new Date().getFullYear()} Achintya Chaganti. Built with Next.js, TypeScript, and Tailwind CSS.
-            </p>
-            <p className="text-white/60 text-sm mt-2">
-              <a
-                href="https://www.dol.gov/agencies/whd/immigration/h1b1"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 hover:text-white/90 transition-colors duration-200 group"
-              >
-                <span className="relative">
-                  H-1B1 eligible (Singapore citizen)
-                  <span className="absolute bottom-0 left-0 w-full h-px bg-white/40 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                </span>
-                <svg
-                  className="w-3 h-3 opacity-50 group-hover:opacity-80 transition-opacity"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-            </p>
-          </div>
-        </ScrollReveal>
+        <div className="mt-24 pt-12 border-t border-white/5 text-center">
+          <p className="text-white/30 text-[11px] font-mono uppercase tracking-[0.4em]">
+            © {new Date().getFullYear()} Achintya Chaganti • Built for the Infinite
+          </p>
+        </div>
       </div>
     </section>
+
   );
 }

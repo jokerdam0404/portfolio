@@ -14,6 +14,7 @@ const config: Config = {
          Finance-focused professional colors with token integration
          ───────────────────────────────────────────────────────────────────── */
       colors: {
+        gold: '#D4AF37',
         // Semantic theme colors (use CSS variables for dynamic theming)
         theme: {
           bg: "rgb(var(--bg) / <alpha-value>)",

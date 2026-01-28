@@ -223,54 +223,68 @@ export default function Projects() {
     : projects.filter((p) => p.category === activeCategory);
 
   return (
-    <section id="projects" className="py-20 px-6 bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section id="projects" className="relative py-24 bg-[#050505] overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
         <ScrollReveal>
-          <h2 className="text-4xl md:text-5xl font-bold text-primary-900 mb-4 text-center">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="w-8 h-px bg-gold" />
+            <span className="text-gold font-mono text-sm tracking-widest uppercase">
+              Impact
+            </span>
+            <div className="w-8 h-px bg-gold" />
+          </div>
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-16 text-center">
             Projects
           </h2>
-          <div className="w-20 h-1 bg-accent-500 mx-auto mb-6" />
-          <p className="text-center text-primary-600 mb-12 max-w-2xl mx-auto">
-            Hands-on projects demonstrating financial modeling, data analysis,
-            and quantitative research skills.
-          </p>
         </ScrollReveal>
 
         {/* Category Filter */}
         <ScrollReveal delay={0.2}>
-          <div className="flex flex-wrap gap-2 justify-center mb-12">
+          <div className="flex flex-wrap gap-2 justify-center mb-16">
             {categories.map((category) => (
-              <Button
+              <button
                 key={category}
-                variant={activeCategory === category ? "default" : "outline"}
                 onClick={() => setActiveCategory(category)}
-                size="sm"
+                className={`px-6 py-2 rounded-full font-mono text-[10px] tracking-[0.2em] uppercase transition-all duration-300 border ${activeCategory === category
+                    ? "bg-gold text-[#050505] border-gold shadow-[0_0_15px_rgba(212,175,55,0.2)]"
+                    : "bg-white/[0.02] text-white/40 border-white/10 hover:border-white/30 hover:text-white"
+                  }`}
               >
                 {category}
-              </Button>
+              </button>
             ))}
           </div>
         </ScrollReveal>
 
         {/* Projects Grid */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {filteredProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </motion.div>
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            key={activeCategory}
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {filteredProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </motion.div>
+        </AnimatePresence>
 
         {filteredProjects.length === 0 && (
-          <p className="text-center text-primary-500 py-12">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center text-white/30 py-24 font-light italic"
+          >
             No projects found in this category.
-          </p>
+          </motion.p>
         )}
       </div>
     </section>
+
   );
 }

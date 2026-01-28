@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Navigation from "@/components/Navigation";
+import SmoothScroll from "@/components/layout/SmoothScroll";
 import "./globals.css";
 
 // Premium variable fonts for distinctive brand identity
@@ -48,10 +49,12 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="font-body antialiased">
+      <body className="font-body antialiased bg-[#050505]">
         <ThemeProvider>
-          <Navigation />
-          {children}
+          <SmoothScroll>
+            <Navigation />
+            {children}
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>

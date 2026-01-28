@@ -10,17 +10,22 @@ import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-20 px-6 bg-primary-50">
-      <div className="max-w-5xl mx-auto">
+    <section id="experience" className="relative py-24 bg-[#0a0a0a]">
+      {/* Subtle top divider gradient */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+
+      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-12">
         <ScrollReveal>
-          <h2 className="text-4xl md:text-5xl font-bold text-primary-900 mb-4 text-center">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="w-8 h-px bg-gold" />
+            <span className="text-gold font-mono text-sm tracking-widest uppercase">
+              Trajectory
+            </span>
+            <div className="w-8 h-px bg-gold" />
+          </div>
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-16 text-center">
             Experience
           </h2>
-          <div className="w-20 h-1 bg-accent-500 mx-auto mb-6" />
-          <p className="text-center text-primary-600 mb-16 max-w-2xl mx-auto">
-            Professional experience in investment banking, equity research, and
-            financial analysis.
-          </p>
         </ScrollReveal>
 
         <motion.div
@@ -28,85 +33,102 @@ export default function Experience() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="space-y-8"
+          className="space-y-12"
         >
           {experiences.map((exp, index) => (
             <ScrollReveal key={exp.id} delay={index * 0.1}>
               <motion.div
                 variants={fadeInUp}
-                whileHover={{ scale: 1.01 }}
-                transition={{ duration: 0.2 }}
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.3 }}
+                className="group relative"
               >
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-start justify-between gap-4 flex-wrap">
-                      <div className="flex-1">
-                        <CardTitle className="text-2xl mb-2">{exp.role}</CardTitle>
-                        <CardDescription className="text-base">
-                          <span className="font-semibold text-primary-700">
-                            {exp.company}
+                {/* Connector line for timeline feel */}
+                {index !== experiences.length - 1 && (
+                  <div className="absolute left-[2.25rem] top-16 bottom-[-3rem] w-px bg-white/5 hidden md:block" />
+                )}
+
+                <div className="relative p-6 md:p-8 bg-white/[0.02] border border-white/[0.05] rounded-2xl backdrop-blur-sm transition-all group-hover:bg-white/[0.04] group-hover:border-gold/30 shadow-2xl">
+                  {/* Subtle card glow */}
+                  <div className="absolute inset-0 rounded-2xl bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity blur-xl" />
+
+                  <div className="relative z-10">
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8">
+                      <div className="flex gap-6">
+                        {/* Icon/Logo Placeholder */}
+                        <div className="hidden md:flex w-12 h-12 flex-shrink-0 items-center justify-center rounded-xl bg-gold/10 text-gold border border-gold/20">
+                          <span className="text-lg font-bold font-display">
+                            {exp.company.charAt(0)}
                           </span>
-                          {" • "}
-                          {exp.location}
-                        </CardDescription>
+                        </div>
+
+                        <div>
+                          <h3 className="text-2xl font-display font-bold text-white mb-1">
+                            {exp.role}
+                          </h3>
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-gold/80 font-medium">
+                            <span className="text-lg">{exp.company}</span>
+                            <span className="w-1 h-1 rounded-full bg-white/20 hidden md:block" />
+                            <span className="text-white/40 text-sm italic font-light">{exp.location}</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <Badge variant={exp.current ? "success" : "secondary"}>
-                          {exp.current ? "Current" : `${formatDate(exp.startDate)} - ${formatDate(exp.endDate)}`}
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardHeader>
 
-                  <CardContent className="space-y-4">
-                    <p className="text-primary-700">{exp.description}</p>
-
-                    <div>
-                      <h4 className="font-semibold text-primary-900 mb-3">
-                        Key Achievements
-                      </h4>
-                      <ul className="space-y-2">
-                        {exp.achievements.map((achievement, i) => (
-                          <li
-                            key={i}
-                            className="flex gap-3 text-primary-600"
-                          >
-                            <svg
-                              className="w-5 h-5 text-accent-500 flex-shrink-0 mt-0.5"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <span>{achievement}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold text-primary-900 mb-2">
-                        Skills Applied
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {exp.skills.map((skill) => (
-                          <Badge key={skill} variant="outline">
-                            {skill}
-                          </Badge>
-                        ))}
+                      <div className="md:text-right">
+                        <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-mono font-bold tracking-wider uppercase ${exp.current
+                            ? "bg-gold/20 text-gold border border-gold/30"
+                            : "bg-white/5 text-white/40 border border-white/10"
+                          }`}>
+                          {exp.current ? "Present" : `${formatDate(exp.startDate)} — ${formatDate(exp.endDate)}`}
+                        </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+
+                    <div className="space-y-8">
+                      <p className="text-lg text-white/60 leading-relaxed font-light italic">
+                        &quot;{exp.description}&quot;
+                      </p>
+
+                      <div className="grid lg:grid-cols-2 gap-8">
+                        <div>
+                          <h4 className="text-sm font-mono text-gold uppercase tracking-[0.2em] mb-4">
+                            Core Focus
+                          </h4>
+                          <ul className="space-y-3">
+                            {exp.achievements.map((achievement, i) => (
+                              <li key={i} className="flex gap-4 text-white/70 group/item">
+                                <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-gold/40 group-hover/item:bg-gold transition-colors flex-shrink-0" />
+                                <span className="text-sm leading-relaxed">{achievement}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div>
+                          <h4 className="text-sm font-mono text-gold uppercase tracking-[0.2em] mb-4">
+                            Expertise Applied
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {exp.skills.map((skill) => (
+                              <span
+                                key={skill}
+                                className="px-3 py-1 rounded-lg border border-white/5 bg-white/[0.03] text-xs font-mono text-white/50 group-hover:border-gold/20 transition-colors"
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             </ScrollReveal>
           ))}
         </motion.div>
       </div>
     </section>
+
   );
 }

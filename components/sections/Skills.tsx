@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import { skills, skillCategories, Skill } from "@/lib/data/skills";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
@@ -39,71 +37,107 @@ export default function Skills() {
   );
 
   return (
-    <section id="skills" className="py-20 px-6 bg-white">
-      <div className="max-w-6xl mx-auto">
+    <section id="skills" className="relative py-24 bg-[#050505]">
+      {/* Background decoration */}
+      <div className="absolute top-1/2 right-0 w-72 h-72 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
         <ScrollReveal>
-          <h2 className="text-4xl md:text-5xl font-bold text-primary-900 mb-4 text-center">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="w-8 h-px bg-gold" />
+            <span className="text-gold font-mono text-sm tracking-widest uppercase">
+              Capabilities
+            </span>
+            <div className="w-8 h-px bg-gold" />
+          </div>
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-16 text-center">
             Skills & Competencies
           </h2>
-          <div className="w-20 h-1 bg-accent-500 mx-auto mb-6" />
-          <p className="text-center text-primary-600 mb-12 max-w-2xl mx-auto">
-            A comprehensive overview of my finance, technical, and professional
-            skills developed through coursework, projects, and work experience.
-          </p>
         </ScrollReveal>
 
         {/* Category Tabs */}
         <ScrollReveal delay={0.2}>
-          <div className="flex flex-wrap gap-3 justify-center mb-12">
+          <div className="flex flex-wrap gap-2 justify-center mb-16">
             {skillCategories.map((category) => (
-              <Button
+              <button
                 key={category.name}
-                variant={activeCategory === category.name ? "default" : "outline"}
                 onClick={() => setActiveCategory(category.name)}
-                size="lg"
-                className="min-w-[140px]"
+                className={`px-8 py-3 rounded-full font-mono text-sm tracking-widest uppercase transition-all duration-300 border ${activeCategory === category.name
+                  ? "bg-gold text-[#050505] border-gold shadow-[0_0_20px_rgba(212,175,55,0.3)]"
+                  : "bg-white/[0.02] text-white/40 border-white/10 hover:border-white/30 hover:text-white"
+                  }`}
               >
                 {category.name}
-              </Button>
+              </button>
             ))}
           </div>
         </ScrollReveal>
 
         {/* Skills Grid */}
-        <div className="grid md:grid-cols-2 gap-x-12 gap-y-8">
-          <motion.div
-            key={activeCategory}
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-            className="md:col-span-2 grid md:grid-cols-2 gap-x-12 gap-y-8"
-          >
-            {filteredSkills.map((skill) => (
-              <SkillBar key={skill.name} skill={skill} />
-            ))}
-          </motion.div>
+        <div className="grid md:grid-cols-2 gap-x-16 gap-y-12">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeCategory}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
+              className="md:col-span-2 grid md:grid-cols-2 gap-x-16 gap-y-10"
+            >
+              {filteredSkills.map((skill) => (
+                <div key={skill.name} className="space-y-4 group">
+                  <div className="flex items-end justify-between">
+                    <div className="space-y-1">
+                      <span className="text-xl font-display font-bold text-white group-hover:text-gold transition-colors">
+                        {skill.name}
+                      </span>
+                      {skill.description && (
+                        <p className="text-xs text-white/40 font-light tracking-wide uppercase">
+                          {skill.description}
+                        </p>
+                      )}
+                    </div>
+                    <span className="text-sm font-mono text-gold/60">{skill.proficiency}%</span>
+                  </div>
+
+                  <div className="relative h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                    <motion.div
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-gold/40 to-gold rounded-full"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${skill.proficiency}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1] }}
+                    >
+                      {/* Interactive glow head */}
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full blur-md opacity-0 group-hover:opacity-40 transition-opacity" />
+                    </motion.div>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
-        {/* Additional Skills Cloud */}
+        {/* All Skills Cloud */}
         <ScrollReveal delay={0.4}>
-          <div className="mt-16 pt-12 border-t border-primary-200">
-            <h3 className="text-2xl font-semibold text-primary-900 mb-6 text-center">
-              All Skills Overview
+          <div className="mt-24 pt-16 border-t border-white/5">
+            <h3 className="text-sm font-mono text-white/20 uppercase tracking-[0.3em] mb-10 text-center">
+              Comprehensive Stack Overview
             </h3>
-            <div className="flex flex-wrap gap-2 justify-center max-w-4xl mx-auto">
+            <div className="flex flex-wrap gap-3 justify-center max-w-4xl mx-auto">
               {skills.map((skill) => (
-                <Badge
+                <div
                   key={skill.name}
-                  variant="outline"
-                  className="text-sm py-1.5 px-3 hover:bg-primary-100 transition-colors cursor-default"
+                  className="px-4 py-2 border border-white/5 bg-white/[0.02] text-xs font-mono text-white/40 rounded-lg hover:border-gold/20 hover:text-white/80 transition-all cursor-default"
                 >
                   {skill.name}
-                </Badge>
+                </div>
               ))}
             </div>
           </div>
         </ScrollReveal>
       </div>
     </section>
+
   );
 }

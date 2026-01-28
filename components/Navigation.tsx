@@ -38,64 +38,81 @@ export default function Navigation() {
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-white/95 dark:bg-primary-900/95 backdrop-blur-md shadow-md"
+          ? "bg-[#050505]/90 backdrop-blur-xl border-b border-white/5 shadow-2xl"
           : "bg-transparent"
       }`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.3 }}
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <motion.a
             href="#"
-            className={`text-2xl font-bold ${
-              isScrolled ? "text-primary-900 dark:text-white" : "text-white"
-            }`}
+            className={`text-2xl font-bold font-display bg-gradient-to-r from-gold via-white to-gold bg-clip-text text-transparent hover:from-white hover:via-gold hover:to-white transition-all duration-500`}
             onClick={(e) => {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, rotate: [0, -5, 5, 0] }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.3 }}
           >
             AC
           </motion.a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Button
+            {navLinks.map((link, index) => (
+              <motion.div
                 key={link.name}
-                variant="ghost"
-                className={`${
-                  isScrolled
-                    ? "text-primary-700 hover:text-primary-900 dark:text-primary-200 dark:hover:text-white"
-                    : "text-white hover:text-white/80"
-                }`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(link.href);
-                }}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + index * 0.05, duration: 0.4 }}
               >
-                {link.name}
-              </Button>
+                <Button
+                  variant="ghost"
+                  className="text-white/70 hover:text-gold hover:bg-gold/5 relative group"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection(link.href);
+                  }}
+                  disableAnimation
+                >
+                  <span className="relative z-10">{link.name}</span>
+                  <motion.span
+                    className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-gold -translate-x-1/2 group-hover:w-3/4 transition-all duration-300"
+                  />
+                </Button>
+              </motion.div>
             ))}
 
             {/* Theme Toggle */}
-            <div className="ml-2">
+            <motion.div
+              className="ml-2"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.4 }}
+            >
               <ThemeToggle />
-            </div>
+            </motion.div>
 
-            <a
+            <motion.a
               href="/resume.pdf"
               download
-              className="ml-2 inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 h-9 px-3 bg-accent-500 text-white hover:bg-accent-600"
+              className="ml-2 inline-flex items-center justify-center rounded-md font-bold transition-all duration-300 h-9 px-4 bg-gold text-[#050505] hover:bg-[#E5C04B] shadow-[0_0_15px_rgba(212,175,55,0.2)] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] relative overflow-hidden group"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.6, duration: 0.4 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Resume
-            </a>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              <span className="relative z-10">Resume</span>
+            </motion.a>
           </div>
 
           {/* Mobile Menu Button */}

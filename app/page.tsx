@@ -1,4 +1,6 @@
-import Hero from "@/components/sections/Hero";
+import CinematicHero from "@/components/sections/CinematicHero";
+import MetricsGrid from "@/components/sections/MetricsGrid";
+import CaseStudySection from "@/components/sections/CaseStudySection";
 import About from "@/components/sections/About";
 import FinanceJourney from "@/components/sections/FinanceJourney";
 import Projects from "@/components/sections/Projects";
@@ -11,8 +13,10 @@ import PageTransition from "@/components/animations/PageTransition";
 export default function Home() {
   return (
     <PageTransition>
-      <main className="min-h-screen">
-        <Hero />
+      <main className="min-h-screen bg-[#050505]">
+        <CinematicHero />
+        <MetricsGrid />
+        <CaseStudySection />
         <About />
         <FinanceJourney />
         <Projects />
@@ -24,3 +28,4 @@ export default function Home() {
     </PageTransition>
   );
 }
+

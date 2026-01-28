@@ -105,12 +105,16 @@ export function ContactForm() {
   };
 
   const inputClasses =
-    "w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all";
+    "w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/30 focus:bg-white/[0.15] hover:border-white/30 transition-all duration-300";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 max-w-lg mx-auto">
       {/* Name Field */}
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
         <label htmlFor="name" className="block text-sm font-medium text-white/80 mb-1">
           Name *
         </label>
@@ -124,10 +128,14 @@ export function ContactForm() {
           className={inputClasses}
           placeholder="Your name"
         />
-      </div>
+      </motion.div>
 
       {/* Email Field */}
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
         <label htmlFor="email" className="block text-sm font-medium text-white/80 mb-1">
           Email *
         </label>
@@ -141,10 +149,14 @@ export function ContactForm() {
           className={inputClasses}
           placeholder="your.email@example.com"
         />
-      </div>
+      </motion.div>
 
       {/* Subject Field */}
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
         <label htmlFor="subject" className="block text-sm font-medium text-white/80 mb-1">
           Subject
         </label>
@@ -162,10 +174,14 @@ export function ContactForm() {
           <option value="Research">Research Inquiry</option>
           <option value="Other">Other</option>
         </select>
-      </div>
+      </motion.div>
 
       {/* Message Field */}
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+      >
         <label htmlFor="message" className="block text-sm font-medium text-white/80 mb-1">
           Message *
         </label>
@@ -179,14 +195,19 @@ export function ContactForm() {
           className={inputClasses}
           placeholder="Your message..."
         />
-      </div>
+      </motion.div>
 
       {/* Submit Button */}
-      <Button
-        type="submit"
-        disabled={status.type === "loading"}
-        className="w-full bg-accent-500 hover:bg-accent-600 text-white py-3 text-base font-medium"
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
       >
+        <Button
+          type="submit"
+          disabled={status.type === "loading"}
+          className="w-full bg-gold hover:bg-[#E5C04B] text-[#050505] py-3 text-base font-bold shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)]"
+        >
         {status.type === "loading" ? (
           <span className="flex items-center justify-center gap-2">
             <svg
@@ -214,7 +235,8 @@ export function ContactForm() {
         ) : (
           "Send Message"
         )}
-      </Button>
+        </Button>
+      </motion.div>
 
       {/* Status Messages */}
       <AnimatePresence mode="wait">
