@@ -1,13 +1,86 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { CharacterHover } from "@/components/typography";
+import { EASING, TIMING } from "@/lib/kinetic-constants";
+
+/**
+ * MagneticNavItem - Navigation item with magnetic hover effect.
+ */
+function MagneticNavItem({
+  children,
+  onClick,
+  className = "",
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+  className?: string;
+}) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const ref = useRef<HTMLButtonElement>(null);
+
+  const springConfig = { stiffness: 200, damping: 20 };
+  const x = useSpring(0, springConfig);
+  const y = useSpring(0, springConfig);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (prefersReducedMotion) return;
+
+    const element = ref.current;
+    if (!element) return;
+
+    const rect = element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    x.set((e.clientX - centerX) * 0.15);
+    y.set((e.clientY - centerY) * 0.15);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  if (prefersReducedMotion) {
+    return (
+      <Button
+        variant="ghost"
+        className={className}
+        onClick={onClick}
+      >
+        {children}
+      </Button>
+    );
+  }
+
+  return (
+    <motion.button
+      ref={ref}
+      className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 ${className}`}
+      style={{ x, y }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onClick={onClick}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{
+        scale: { duration: TIMING.fast, ease: EASING.snappy },
+      }}
+    >
+      {children}
+    </motion.button>
+  );
+}
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const navLinks = [
     { name: "About", href: "#about" },
@@ -49,7 +122,7 @@ export default function Navigation() {
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo with character hover effect */}
           <motion.a
             href="#"
             className={`text-2xl font-bold font-display bg-gradient-to-r from-gold via-white to-gold bg-clip-text text-transparent hover:from-white hover:via-gold hover:to-white transition-all duration-500`}
@@ -61,10 +134,15 @@ export default function Navigation() {
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.3 }}
           >
-            AC
+            <CharacterHover
+              text="AC"
+              hoverColor="#D4AF37"
+              hoverScale={1.3}
+              className="text-2xl font-bold font-display"
+            />
           </motion.a>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation with magnetic effects */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link, index) => (
               <motion.div
@@ -73,20 +151,25 @@ export default function Navigation() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + index * 0.05, duration: 0.4 }}
               >
-                <Button
-                  variant="ghost"
+                <MagneticNavItem
                   className="text-white/70 hover:text-gold hover:bg-gold/5 relative group"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(link.href);
-                  }}
-                  disableAnimation
+                  onClick={() => scrollToSection(link.href)}
                 >
-                  <span className="relative z-10">{link.name}</span>
+                  <span className="relative z-10">
+                    {prefersReducedMotion ? (
+                      link.name
+                    ) : (
+                      <CharacterHover
+                        text={link.name}
+                        hoverColor="#D4AF37"
+                        hoverScale={1.15}
+                      />
+                    )}
+                  </span>
                   <motion.span
                     className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-gold -translate-x-1/2 group-hover:w-3/4 transition-all duration-300"
                   />
-                </Button>
+                </MagneticNavItem>
               </motion.div>
             ))}
 
@@ -100,6 +183,7 @@ export default function Navigation() {
               <ThemeToggle />
             </motion.div>
 
+            {/* Resume button with enhanced hover */}
             <motion.a
               href="/resume.pdf"
               download
@@ -151,7 +235,7 @@ export default function Navigation() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu with staggered animations */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
@@ -161,30 +245,69 @@ export default function Navigation() {
               transition={{ duration: 0.3 }}
               className="md:hidden overflow-hidden"
             >
-              <div className="py-4 space-y-2">
+              <motion.div
+                className="py-4 space-y-2"
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.05,
+                      delayChildren: 0.1,
+                    },
+                  },
+                }}
+              >
                 {navLinks.map((link) => (
-                  <Button
+                  <motion.div
                     key={link.name}
-                    variant="ghost"
-                    className={`w-full justify-start ${
-                      isScrolled ? "text-primary-700 dark:text-primary-200" : "text-white"
-                    }`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection(link.href);
+                    variants={{
+                      hidden: { opacity: 0, x: -20 },
+                      visible: {
+                        opacity: 1,
+                        x: 0,
+                        transition: {
+                          duration: 0.3,
+                          ease: EASING.smooth,
+                        },
+                      },
                     }}
                   >
-                    {link.name}
-                  </Button>
+                    <Button
+                      variant="ghost"
+                      className={`w-full justify-start ${
+                        isScrolled ? "text-primary-700 dark:text-primary-200" : "text-white"
+                      }`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollToSection(link.href);
+                      }}
+                    >
+                      {link.name}
+                    </Button>
+                  </motion.div>
                 ))}
-                <a
+                <motion.a
                   href="/resume.pdf"
                   download
-                  className="w-full inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 h-10 px-4 py-2 bg-accent-500 text-white hover:bg-accent-600"
+                  className="w-full inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 h-10 px-4 py-2 bg-gold text-[#050505] hover:bg-[#E5C04B]"
+                  variants={{
+                    hidden: { opacity: 0, x: -20 },
+                    visible: {
+                      opacity: 1,
+                      x: 0,
+                      transition: {
+                        duration: 0.3,
+                        ease: EASING.smooth,
+                      },
+                    },
+                  }}
                 >
                   Download Resume
-                </a>
-              </div>
+                </motion.a>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>

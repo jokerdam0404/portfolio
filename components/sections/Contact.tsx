@@ -3,8 +3,13 @@
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import { ContactForm } from "@/components/ui/contact-form";
+import { AnimatedSectionHeader, ScrollRevealText, CharacterHover } from "@/components/typography";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { EASING, TIMING } from "@/lib/kinetic-constants";
 
 export default function Contact() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   const socialLinks = [
     {
       name: "LinkedIn",
@@ -41,26 +46,18 @@ export default function Contact() {
       <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-gold/5 via-transparent to-transparent pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
-        <ScrollReveal>
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-8 h-px bg-gold" />
-            <span className="text-gold font-mono text-sm tracking-widest uppercase">
-              Connection
-            </span>
-            <div className="w-8 h-px bg-gold" />
-          </div>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-6 text-center">
-            Get In Touch
-          </h2>
-          <p className="text-center text-white/50 mb-16 max-w-2xl mx-auto text-lg font-light">
-            Seeking opportunities in equity research, quantitative finance,
-            and investment banking. Let&apos;s build something exceptional.
-          </p>
-        </ScrollReveal>
+        {/* Animated Section Header */}
+        <AnimatedSectionHeader
+          label="Connection"
+          title="Get In Touch"
+          description="Seeking opportunities in equity research, quantitative finance, and investment banking. Let's build something exceptional."
+          animation="split"
+          className="mb-16"
+        />
 
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left: Contact Form */}
-          <ScrollReveal delay={0.2}>
+          <ScrollRevealText delay={0.2} direction="left">
             <div className="relative group">
               {/* Premium form glow */}
               <div className="absolute -inset-1 bg-gradient-to-r from-gold/20 via-transparent to-gold/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
@@ -72,13 +69,25 @@ export default function Contact() {
                 <ContactForm />
               </div>
             </div>
-          </ScrollReveal>
+          </ScrollRevealText>
 
           {/* Right: Contact Info */}
-          <ScrollReveal delay={0.3}>
+          <ScrollRevealText delay={0.3} direction="right">
             <div className="space-y-10">
               {/* Direct Contact Cards */}
-              <div className="grid sm:grid-cols-2 gap-6">
+              <motion.div
+                className="grid sm:grid-cols-2 gap-6"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: { staggerChildren: 0.1 },
+                  },
+                }}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
                 {[
                   {
                     label: "Email",
@@ -104,71 +113,122 @@ export default function Contact() {
                   <motion.a
                     key={item.label}
                     href={item.href}
-                    whileHover={{ y: -4 }}
-                    className="p-6 bg-white/[0.02] border border-white/10 rounded-2xl hover:bg-gold/5 hover:border-gold/30 transition-all group"
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: { opacity: 1, y: 0 },
+                    }}
+                    whileHover={prefersReducedMotion ? undefined : { y: -4 }}
+                    className="p-6 bg-white/[0.02] border border-white/10 rounded-2xl hover:bg-gold/5 hover:border-gold/30 transition-all group/card"
                   >
-                    <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center text-gold mb-4 group-hover:scale-110 transition-transform">
+                    <motion.div
+                      className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center text-gold mb-4 group-hover/card:scale-110 transition-transform"
+                      whileHover={prefersReducedMotion ? undefined : { rotate: 10 }}
+                    >
                       {item.icon}
-                    </div>
+                    </motion.div>
                     <div className="text-[10px] font-mono text-white/30 uppercase tracking-widest mb-1">{item.label}</div>
                     <div className="text-sm text-white/80 font-medium truncate">{item.value}</div>
                   </motion.a>
                 ))}
-              </div>
+              </motion.div>
 
               {/* Socials & Resume */}
               <div className="p-8 bg-white/[0.02] border border-white/10 rounded-3xl">
                 <h3 className="text-sm font-mono text-gold uppercase tracking-[0.2em] mb-8">Professional Profiles</h3>
 
-                <div className="flex flex-wrap gap-4 mb-10">
+                <motion.div
+                  className="flex flex-wrap gap-4 mb-10"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: {
+                      opacity: 1,
+                      transition: { staggerChildren: 0.1 },
+                    },
+                  }}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                >
                   {socialLinks.map((link) => (
                     <motion.a
                       key={link.name}
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-gold/40 transition-all group"
-                      whileHover={{ scale: 1.02 }}
+                      variants={{
+                        hidden: { opacity: 0, scale: 0.8 },
+                        visible: { opacity: 1, scale: 1 },
+                      }}
+                      whileHover={prefersReducedMotion ? undefined : { scale: 1.05 }}
+                      className="flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-gold/40 transition-all group/social"
                     >
-                      <span className="text-white/60 group-hover:text-gold transition-colors">{link.icon}</span>
-                      <span className="text-sm font-medium text-white/80">{link.name}</span>
+                      <span className="text-white/60 group-hover/social:text-gold transition-colors">{link.icon}</span>
+                      <span className="text-sm font-medium text-white/80">
+                        {prefersReducedMotion ? (
+                          link.name
+                        ) : (
+                          <CharacterHover
+                            text={link.name}
+                            hoverColor="#D4AF37"
+                            hoverScale={1.1}
+                          />
+                        )}
+                      </span>
                     </motion.a>
                   ))}
-                </div>
+                </motion.div>
 
-                <a
+                <motion.a
                   href="/resume.pdf"
                   download
-                  className="w-full inline-flex items-center justify-center gap-3 py-4 bg-gold text-[#050505] font-bold rounded-xl hover:bg-[#E5C04B] transition-all duration-300 shadow-[0_0_30px_rgba(212,175,55,0.2)] hover:shadow-[0_0_40px_rgba(212,175,55,0.4)] hover:scale-[1.01]"
+                  className="w-full inline-flex items-center justify-center gap-3 py-4 bg-gold text-[#050505] font-bold rounded-xl hover:bg-[#E5C04B] transition-all duration-300 shadow-[0_0_30px_rgba(212,175,55,0.2)] hover:shadow-[0_0_40px_rgba(212,175,55,0.4)]"
+                  whileHover={prefersReducedMotion ? undefined : { scale: 1.01 }}
+                  whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                   Download Full Resume
-                </a>
+                </motion.a>
               </div>
 
               {/* Additional Eligibility Note */}
-              <div className="flex items-center gap-4 p-5 bg-gold/5 border border-gold/10 rounded-2xl">
-                <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold">
+              <motion.div
+                className="flex items-center gap-4 p-5 bg-gold/5 border border-gold/10 rounded-2xl"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+              >
+                <motion.div
+                  className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold"
+                  animate={prefersReducedMotion ? undefined : { scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                </div>
+                </motion.div>
                 <p className="text-sm text-gold/80">
                   <span className="font-bold">H-1B1 Visa Holder:</span> Singapore citizen with expedited authorization for US employment.
                 </p>
-              </div>
+              </motion.div>
             </div>
-          </ScrollReveal>
+          </ScrollRevealText>
         </div>
 
         {/* Footer */}
-        <div className="mt-24 pt-12 border-t border-white/5 text-center">
+        <motion.div
+          className="mt-24 pt-12 border-t border-white/5 text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+        >
           <p className="text-white/30 text-[11px] font-mono uppercase tracking-[0.4em]">
-            © {new Date().getFullYear()} Achintya Chaganti • Built for the Infinite
+            {new Date().getFullYear()} Achintya Chaganti - Built for the Infinite
           </p>
-        </div>
+        </motion.div>
       </div>
     </section>
 
