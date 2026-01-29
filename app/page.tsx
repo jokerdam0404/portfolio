@@ -1,4 +1,4 @@
-import CinematicHero from "@/components/sections/CinematicHero";
+import WormholeHero from "@/components/sections/WormholeHero";
 import MetricsGrid from "@/components/sections/MetricsGrid";
 import CaseStudySection from "@/components/sections/CaseStudySection";
 import About from "@/components/sections/About";
@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <PageTransition>
       <main className="min-h-screen bg-[#050505]">
-        <CinematicHero />
+        <WormholeHero />
         <MetricsGrid />
         <CaseStudySection />
         <About />
