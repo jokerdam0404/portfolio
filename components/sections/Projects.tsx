@@ -7,19 +7,25 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TiltCard } from "@/components/ui/tilt-card";
 import ScrollReveal from "@/components/animations/ScrollReveal";
+import { AnimatedSectionHeader, ScrollRevealText } from "@/components/typography";
 import { projects, Project } from "@/lib/data/projects";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { EASING, TIMING } from "@/lib/kinetic-constants";
 
 const categories = ["All", "Financial Modeling", "Equity Research", "Data Analysis", "Computational Physics", "Cloud Computing"];
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [showDetails, setShowDetails] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
     <>
       <motion.div
         variants={fadeInUp}
         className="h-full"
+        whileHover={prefersReducedMotion ? undefined : { y: -8 }}
+        transition={{ duration: TIMING.normal, ease: EASING.smooth }}
       >
         {/* TiltCard wrapper for 3D hover effect */}
         <TiltCard
@@ -33,13 +39,17 @@ function ProjectCard({ project }: { project: Project }) {
             {/* Image Placeholder */}
             <div className="h-48 bg-gradient-to-br from-accent-500 to-primary-900 relative overflow-hidden">
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                <span className="text-white text-4xl font-bold opacity-50">
-                  {project.category === "Financial Modeling" && "📊"}
-                  {project.category === "Data Analysis" && "📈"}
-                  {project.category === "Computational Physics" && "⚛️"}
-                  {project.category === "Equity Research" && "🔍"}
-                  {project.category === "Cloud Computing" && "☁️"}
-                </span>
+                <motion.span
+                  className="text-white text-4xl font-bold opacity-50"
+                  whileHover={prefersReducedMotion ? undefined : { scale: 1.2, rotate: 10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {project.category === "Financial Modeling" && "FIN"}
+                  {project.category === "Data Analysis" && "DATA"}
+                  {project.category === "Computational Physics" && "PHY"}
+                  {project.category === "Equity Research" && "EQR"}
+                  {project.category === "Cloud Computing" && "CLD"}
+                </motion.span>
               </div>
               {project.featured && (
                 <Badge className="absolute top-4 right-4 bg-success-500">
@@ -217,6 +227,7 @@ function ProjectCard({ project }: { project: Project }) {
 
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState("All");
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const filteredProjects = activeCategory === "All"
     ? projects
@@ -228,35 +239,50 @@ export default function Projects() {
       <div className="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
-        <ScrollReveal>
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-8 h-px bg-gold" />
-            <span className="text-gold font-mono text-sm tracking-widest uppercase">
-              Impact
-            </span>
-            <div className="w-8 h-px bg-gold" />
-          </div>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-16 text-center">
-            Projects
-          </h2>
-        </ScrollReveal>
+        {/* Animated Section Header */}
+        <AnimatedSectionHeader
+          label="Impact"
+          title="Projects"
+          animation="split"
+          className="mb-16"
+        />
 
-        {/* Category Filter */}
+        {/* Category Filter with staggered animations */}
         <ScrollReveal delay={0.2}>
-          <div className="flex flex-wrap gap-2 justify-center mb-16">
+          <motion.div
+            className="flex flex-wrap gap-2 justify-center mb-16"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.05,
+                },
+              },
+            }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             {categories.map((category) => (
-              <button
+              <motion.button
                 key={category}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 },
+                }}
                 onClick={() => setActiveCategory(category)}
+                whileHover={prefersReducedMotion ? undefined : { scale: 1.05 }}
+                whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
                 className={`px-6 py-2 rounded-full font-mono text-[10px] tracking-[0.2em] uppercase transition-all duration-300 border ${activeCategory === category
                     ? "bg-gold text-[#050505] border-gold shadow-[0_0_15px_rgba(212,175,55,0.2)]"
                     : "bg-white/[0.02] text-white/40 border-white/10 hover:border-white/30 hover:text-white"
                   }`}
               >
                 {category}
-              </button>
+              </motion.button>
             ))}
-          </div>
+          </motion.div>
         </ScrollReveal>
 
         {/* Projects Grid */}
@@ -268,8 +294,8 @@ export default function Projects() {
             animate="visible"
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {filteredProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+            {filteredProjects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
             ))}
           </motion.div>
         </AnimatePresence>

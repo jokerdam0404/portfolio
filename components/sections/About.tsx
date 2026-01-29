@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Headshot } from "@/components/ui/headshot";
 import ScrollReveal from "@/components/animations/ScrollReveal";
+import { AnimatedSectionHeader, ScrollRevealText } from "@/components/typography";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 // Lazy load 3D geometric frame for performance
@@ -28,18 +29,13 @@ export default function About() {
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
-        <ScrollReveal>
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-8 h-px bg-gold" />
-            <span className="text-gold font-mono text-sm tracking-widest uppercase">
-              Identity
-            </span>
-            <div className="w-8 h-px bg-gold" />
-          </div>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-16 text-center">
-            About Me
-          </h2>
-        </ScrollReveal>
+        {/* Animated Section Header */}
+        <AnimatedSectionHeader
+          label="Identity"
+          title="About Me"
+          animation="split"
+          className="mb-16"
+        />
 
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left: Headshot with premium frame and 3D elements */}
@@ -111,9 +107,9 @@ export default function About() {
             </div>
           </ScrollReveal>
 
-          {/* Right: About Content */}
+          {/* Right: About Content with scroll-triggered animations */}
           <div className="space-y-8">
-            <ScrollReveal delay={0.3}>
+            <ScrollRevealText delay={0.3} direction="up">
               <h3 className="text-2xl md:text-3xl font-display font-bold text-white mb-6">
                 Physics & Economics Student <br />
                 <span className="text-gold">Equity Analyst</span>
@@ -132,9 +128,9 @@ export default function About() {
                   rigor I apply to equity valuation and investment decisions.
                 </p>
               </div>
-            </ScrollReveal>
+            </ScrollRevealText>
 
-            <ScrollReveal delay={0.4}>
+            <ScrollRevealText delay={0.4} direction="up">
               <div className="pt-8 border-t border-white/10">
                 <h4 className="text-sm font-mono text-gold uppercase tracking-[0.2em] mb-6">
                   Specialization
@@ -146,16 +142,22 @@ export default function About() {
                   viewport={{ once: true }}
                   className="flex flex-wrap gap-2"
                 >
-                  {interests.map((interest) => (
-                    <motion.div key={interest} variants={fadeInUp}>
-                      <div className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] text-sm text-white/80 hover:border-gold/40 hover:bg-gold/5 transition-colors cursor-default">
+                  {interests.map((interest, index) => (
+                    <motion.div
+                      key={interest}
+                      variants={fadeInUp}
+                      custom={index}
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <div className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] text-sm text-white/80 hover:border-gold/40 hover:bg-gold/5 hover:text-gold transition-all duration-300 cursor-default">
                         {interest}
                       </div>
                     </motion.div>
                   ))}
                 </motion.div>
               </div>
-            </ScrollReveal>
+            </ScrollRevealText>
           </div>
         </div>
       </div>

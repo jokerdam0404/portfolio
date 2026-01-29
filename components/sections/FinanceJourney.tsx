@@ -5,8 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ScrollReveal from "@/components/animations/ScrollReveal";
+import { AnimatedSectionHeader } from "@/components/typography";
 import { journeyData, JourneyMilestone } from "@/lib/data/journey";
 import { formatDate } from "@/lib/utils";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { EASING, TIMING } from "@/lib/kinetic-constants";
 
 const categoryColors = {
   Course: "bg-accent-500",
@@ -19,6 +22,7 @@ const categoryColors = {
 
 function TimelineCard({ milestone, index }: { milestone: JourneyMilestone; index: number }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
     <ScrollReveal delay={index * 0.08}>
@@ -34,14 +38,21 @@ function TimelineCard({ milestone, index }: { milestone: JourneyMilestone; index
         }}
       >
         <div className={`flex items-center gap-4 ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
-          {/* Timeline Dot */}
+          {/* Timeline Dot with pulse animation */}
           <div className="hidden md:flex flex-col items-center flex-shrink-0">
-            <div className={`w-4 h-4 rounded-full ${categoryColors[milestone.category]} ring-4 ring-white`} />
+            <motion.div
+              className={`w-4 h-4 rounded-full ${categoryColors[milestone.category]} ring-4 ring-white`}
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 + 0.3, type: "spring", stiffness: 500 }}
+              whileHover={prefersReducedMotion ? undefined : { scale: 1.5 }}
+            />
           </div>
 
           {/* Card */}
           <motion.div
-            whileHover={{ scale: 1.02, y: -4 }}
+            whileHover={prefersReducedMotion ? undefined : { scale: 1.02, y: -4 }}
             transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
             className="flex-1"
           >
@@ -95,13 +106,32 @@ function TimelineCard({ milestone, index }: { milestone: JourneyMilestone; index
                           <h4 className="font-semibold text-primary-900 mb-2">
                             Skills Learned
                           </h4>
-                          <div className="flex flex-wrap gap-2">
+                          <motion.div
+                            className="flex flex-wrap gap-2"
+                            variants={{
+                              hidden: { opacity: 0 },
+                              visible: {
+                                opacity: 1,
+                                transition: { staggerChildren: 0.05 },
+                              },
+                            }}
+                            initial="hidden"
+                            animate="visible"
+                          >
                             {milestone.skills.map((skill) => (
-                              <Badge key={skill} variant="secondary">
-                                {skill}
-                              </Badge>
+                              <motion.div
+                                key={skill}
+                                variants={{
+                                  hidden: { opacity: 0, scale: 0.8 },
+                                  visible: { opacity: 1, scale: 1 },
+                                }}
+                              >
+                                <Badge variant="secondary">
+                                  {skill}
+                                </Badge>
+                              </motion.div>
                             ))}
-                          </div>
+                          </motion.div>
                         </div>
 
                         {milestone.resources && milestone.resources.length > 0 && (
@@ -130,29 +160,33 @@ function TimelineCard({ milestone, index }: { milestone: JourneyMilestone; index
 }
 
 export default function FinanceJourney() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   return (
     <section id="journey" className="relative py-24 bg-[#0a0a0a]">
       {/* Subtle top divider gradient */}
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-12">
-        <ScrollReveal>
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-8 h-px bg-gold" />
-            <span className="text-gold font-mono text-sm tracking-widest uppercase">
-              Evolution
-            </span>
-            <div className="w-8 h-px bg-gold" />
-          </div>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-16 text-center">
-            My Finance Journey
-          </h2>
-        </ScrollReveal>
+        {/* Animated Section Header */}
+        <AnimatedSectionHeader
+          label="Evolution"
+          title="My Finance Journey"
+          animation="split"
+          className="mb-16"
+        />
 
         {/* Timeline */}
         <div className="relative">
-          {/* Timeline Line */}
-          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-white/5" />
+          {/* Timeline Line with animated reveal */}
+          <motion.div
+            className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-px bg-white/5"
+            initial={{ height: 0 }}
+            whileInView={{ height: "100%" }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, ease: EASING.smooth }}
+            style={{ originY: 0 }}
+          />
 
           {/* Timeline Items */}
           <div className="space-y-12">
