@@ -25,11 +25,11 @@ interface CinematicVideoHeroProps {
   onSkipIntro?: () => void;
 }
 
-// Scene configuration
+// Scene configuration - Space to Wall Street Journey
 const SCENES = [
-  { id: "stairs", label: "Ascent", video: "/cinematic/stairs.mp4", poster: "/cinematic/stairs-poster.jpg" },
-  { id: "blackhole", label: "Transit", video: "/cinematic/blackhole.mp4", poster: "/cinematic/blackhole-poster.jpg" },
-  { id: "trading", label: "Arrival", video: "/cinematic/trading.mp4", poster: "/cinematic/trading-poster.jpg" },
+  { id: "space", label: "Origins", video: "/cinematic/journey/encoded/space-journey.mp4", poster: "/cinematic/journey/posters/space-poster.jpg" },
+  { id: "wormhole", label: "Transformation", video: "/cinematic/journey/encoded/wormhole-transit.mp4", poster: "/cinematic/journey/posters/wormhole-poster.jpg" },
+  { id: "wallstreet", label: "Arrival", video: "/cinematic/journey/encoded/wall-street-arrival.mp4", poster: "/cinematic/journey/posters/wallstreet-poster.jpg" },
 ] as const;
 
 // Total scroll height as multiplier of viewport height
