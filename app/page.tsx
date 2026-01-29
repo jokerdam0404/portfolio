@@ -1,3 +1,4 @@
+// Space to Wall Street Hero - Cinematic Journey
 import SpaceToWallStreetHero from "@/components/sections/SpaceToWallStreetHero";
 import MetricsGrid from "@/components/sections/MetricsGrid";
 import CaseStudySection from "@/components/sections/CaseStudySection";
