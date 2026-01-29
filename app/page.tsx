@@ -1,5 +1,5 @@
 // Space to Wall Street Hero - Cinematic Journey
-import SpaceToWallStreetHero from "@/components/sections/SpaceToWallStreetHero";
+import { CinematicVideoHero } from "@/components/hero";
 import MetricsGrid from "@/components/sections/MetricsGrid";
 import CaseStudySection from "@/components/sections/CaseStudySection";
 import About from "@/components/sections/About";
@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <PageTransition>
       <main className="min-h-screen bg-[#050505]">
-        <SpaceToWallStreetHero />
+        <CinematicVideoHero />
         <MetricsGrid />
         <CaseStudySection />
         <About />

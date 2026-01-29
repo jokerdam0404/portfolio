@@ -26,8 +26,9 @@ interface CinematicVideoHeroProps {
 }
 
 // Scene configuration - Space to Wall Street Journey
+// Three-act narrative: Ascent → Transformation → Arrival
 const SCENES = [
-  { id: "space", label: "Origins", video: "/cinematic/journey/encoded/space-journey.mp4", poster: "/cinematic/journey/posters/space-poster.jpg" },
+  { id: "ascent", label: "Origins", video: "/cinematic/journey/encoded/ascent-stairs-1080p.mp4", poster: "/cinematic/journey/posters/ascent-poster.jpg" },
   { id: "wormhole", label: "Transformation", video: "/cinematic/journey/encoded/wormhole-transit.mp4", poster: "/cinematic/journey/posters/wormhole-poster.jpg" },
   { id: "wallstreet", label: "Arrival", video: "/cinematic/journey/encoded/wall-street-arrival.mp4", poster: "/cinematic/journey/posters/wallstreet-poster.jpg" },
 ] as const;
