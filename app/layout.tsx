@@ -3,6 +3,8 @@ import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Navigation from "@/components/Navigation";
 import SmoothScroll from "@/components/layout/SmoothScroll";
+import PremiumCursor from "@/components/ui/PremiumCursor";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 import "./globals.css";
 
 // Premium variable fonts for distinctive brand identity
@@ -51,6 +53,8 @@ export default function RootLayout({
     >
       <body className="font-body antialiased bg-[#050505]">
         <ThemeProvider>
+          <PremiumCursor />
+          <ScrollProgress position="top" height={3} showPercentage={false} />
           <SmoothScroll>
             <Navigation />
             {children}
